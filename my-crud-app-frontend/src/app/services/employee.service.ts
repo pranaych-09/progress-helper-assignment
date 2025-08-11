@@ -1,4 +1,3 @@
-// services/employee.service.ts
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class EmployeeService {
   private apiUrl = 'http://localhost:3000/api/employees';
-  
+  private hashApiUrl = 'http://localhost:3000/generate-hash'; 
   constructor(private http: HttpClient) {
     console.log('EmployeeService initialized');
   }

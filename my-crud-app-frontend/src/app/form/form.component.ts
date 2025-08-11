@@ -205,8 +205,7 @@ export class FormComponent {
       error: (err: any) => {
         this.showErrorModal = true;
         console.error('Error creating employee:', err);
-        alert('Failed to create employee. Please try again.');
-        this.showSuccessModal = false;
+        // alert('Failed to create employee. Please try again.');
       }
     });
 

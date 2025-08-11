@@ -25,12 +25,9 @@ export class ViewComponent {
   qrcode(){
     const dialogRef = this.dialog.open(QrDialogComponent, {
           data: { empID: this.employee.empID },
-          disableClose: true, 
+          disableClose : false
         });
 
-        dialogRef.afterClosed().subscribe(() => {
-          this.router.navigate(['/']);
-        });
   }
 
   getProfilePictureUrl(): string {
@@ -68,7 +65,8 @@ export class ViewComponent {
   onDelete() {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent,
       {
-        data: { employee: this.employee }
+        data: { employee: this.employee },
+        disableClose : false
       }
     );
 

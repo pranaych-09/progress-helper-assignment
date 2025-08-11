@@ -94,3 +94,17 @@ a:hover {
   cursor: pointer;
 }
 
+.view-link {
+  display: inline-flex;
+  align-items: center; 
+  color: #0077b6;     
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.view-link mat-icon {
+  font-size: 25px;     /* size to match screenshot */
+  margin-right: 4px;   /* space between icon & text */
+}
+

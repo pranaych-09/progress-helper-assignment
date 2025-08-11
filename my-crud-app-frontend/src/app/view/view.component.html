@@ -17,7 +17,7 @@
                     <button mat-icon-button (click)="onEdit()" matTooltip="Edit"
                         [routerLink]="['/form', employee.empID]"
                         style="border: 1px solid #ccc; border-radius: 4px; padding: 4px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                        <mat-icon>edit</mat-icon>       
+                        <mat-icon>edit</mat-icon>
                     </button>
 
                     <button mat-icon-button (click)="onDelete()" matTooltip="Delete"
@@ -32,7 +32,10 @@
                 <h3 class="fixed-heading">Account Details</h3>
                 <div class="info-grid">
                     <p><strong>Idnetification Card</strong>
-                        <a><mat-icon (click)="qrcode()" style="cursor: pointer;">visibility</mat-icon></a>
+                        <a (click)="qrcode()" class="view-link">
+                            <mat-icon>visibility</mat-icon>
+                            <span>View</span>
+                        </a>
                     </p>
                     <p><strong>Employee Code</strong> {{ employee.empID }}</p>
 
@@ -65,16 +68,18 @@
                 <div *ngIf="employee.kyc" class="info-grid">
                     <p>
                         <strong>{{ employee.kyc.name }}</strong>
-                        <a [href]="getDocumentUrl(employee.kyc.path)" target="_blank" rel="noopener noreferrer">
+                        <a [href]="getDocumentUrl(employee.kyc.path)" target="_blank" rel="noopener noreferrer" class="view-link">
                             <mat-icon>visibility</mat-icon>
+                            <span>View</span>
                         </a>
                     </p>
                 </div>
                 <div *ngFor="let doc of employee.documents" class="info-grid">
                     <p>
                         <strong>{{ doc.name }}</strong>
-                        <a [href]="getDocumentUrl(doc.path)" target="_blank" rel="noopener noreferrer">
+                        <a [href]="getDocumentUrl(doc.path)" target="_blank" rel="noopener noreferrer" class="view-link">
                             <mat-icon>visibility</mat-icon>
+                            <span>View</span>
                         </a>
                     </p>
                 </div>

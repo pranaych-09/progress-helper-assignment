@@ -16,4 +16,6 @@ app.use('/api/documents', documentRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+
+
 export default app;

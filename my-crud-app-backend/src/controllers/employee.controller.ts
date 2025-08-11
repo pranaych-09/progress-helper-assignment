@@ -22,6 +22,7 @@ export const getEmployeeById = async (req: Request, res: Response) => {
   }
 };
 
+  
 const generateEmpID = async (): Promise<string> => {
   const counter = await Counter.findByIdAndUpdate(
     'empID',
@@ -229,4 +230,6 @@ export const getEmployeesWithFilters = async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ message: 'Search failed' });
   }
+
+
 };
