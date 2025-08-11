@@ -16,6 +16,7 @@ import { EmployeeService } from '../services/employee.service';
 })
 export class HomeComponent {
   selectedEmployee: any;
+  employeesList : any[] = [];
   constructor(private empService: EmployeeService) { }
 
   convertToCSV(objArray: any[]): string {
@@ -38,51 +39,96 @@ export class HomeComponent {
     this.selectedEmployee = employee;
     // console.log('Selected Employee:', this.selectedEmployee);
   }
-
-  downloadHelpers() {
-    this.empService.getEmployees().subscribe(
-      (data: any) => {
-        
-        console.log('Helpers downloaded successfully:', data);
-        const cleanedData = data.map((emp: any) => {
-          const { profilePicture, documents, __v, _id, kyc,updatedAt,createdAt,name,typeOfService,organizationName,email,phone,gender,empID,languagesKnown } = emp;
-
-        // Format date to dd-MM-yyyy or any preferred format
-        const formattedDate = new Date(createdAt).toLocaleDateString('en-GB', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric'
-        });
-
-        return {
-          EmployeeID : empID,
-          Name : name,
-          Service : typeOfService,
-          Organisation : organizationName,
-          Languages:languagesKnown,
-          Email : email,
-          Phone : phone,
-          Gender : gender,
-          JoinedOn: formattedDate 
-        };
-        });
-        console.log(cleanedData);
-        const csv = this.convertToCSV(cleanedData);
-
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'helpers.csv';
-        a.click();
-        window.URL.revokeObjectURL(url);
-        console.log('Download initiated');
-      },
-      (error: any) => {
-        console.error('Error downloading helpers:', error);
-        alert("some error ocurred")
-      }
-    );
-    // console.log('Downloading helpers...');
+  onEmployeesListChanged(employees : any[]){
+    this.employeesList = employees;
   }
+  // downloadHelpers() {
+  //   this.empService.getEmployees().subscribe(
+  //     (data: any) => {
+        
+  //       console.log('Helpers downloaded successfully:', data);
+  //       const cleanedData = data.map((emp: any) => {
+  //         const { profilePicture, documents, __v, _id, kyc,updatedAt,createdAt,name,typeOfService,organizationName,email,phone,gender,empID,languagesKnown } = emp;
+
+  //       // Format date to dd-MM-yyyy or any preferred format
+  //       const formattedDate = new Date(createdAt).toLocaleDateString('en-GB', {
+  //         day: '2-digit',
+  //         month: '2-digit',
+  //         year: 'numeric'
+  //       });
+
+  //       return {
+  //         EmployeeID : empID,
+  //         Name : name,
+  //         Service : typeOfService,
+  //         Organisation : organizationName,
+  //         Languages:languagesKnown,
+  //         Email : email,
+  //         Phone : phone,
+  //         Gender : gender,
+  //         JoinedOn: formattedDate 
+  //       };
+  //       });
+  //       console.log(cleanedData);
+  //       const csv = this.convertToCSV(cleanedData);
+
+  //       const blob = new Blob([csv], { type: 'text/csv' });
+  //       const url = window.URL.createObjectURL(blob);
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = 'helpers.csv';
+  //       a.click();
+  //       window.URL.revokeObjectURL(url);
+  //       console.log('Download initiated');
+  //     },
+  //     (error: any) => {
+  //       console.error('Error downloading helpers:', error);
+  //       alert("some error ocurred")
+  //     }
+  //   );
+    // console.log('Downloading helpers...');
+  // }
+  downloadHelpers() {
+    if (!this.employeesList.length) {
+      alert("No employee data available to download.");
+      return;
+    }
+
+    const cleanedData = this.employeesList.map(emp => {
+      const { profilePicture, documents, __v, _id, kyc, updatedAt, createdAt, name, typeOfService, organizationName, email, phone, gender, empID, languagesKnown } = emp;
+
+      const formattedDate = createdAt
+        ? new Date(createdAt).toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          })
+        : '';
+
+      return {
+        EmployeeID: empID,
+        Name: name,
+        Service: typeOfService,
+        Organisation: organizationName,
+        Languages: languagesKnown,
+        Email: email,
+        Phone: phone,
+        Gender: gender,
+        JoinedOn: formattedDate,
+      };
+    });
+
+    const csv = this.convertToCSV(cleanedData);
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'helpers.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    console.log('Download initiated');
+  }
+
+
+
 }

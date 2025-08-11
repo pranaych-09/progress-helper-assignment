@@ -186,7 +186,9 @@ export class EditFormComponent implements OnInit {
     console.log("bhAAi", path);
     const fallback = '/uploads/profile-pics/default.jpg';
 
-    if (!path) return `http://localhost:3000${fallback}`;
+    if (!path) {
+      return `http://localhost:3000${fallback}`;
+    }
 
     return `http://localhost:3000${path.replace(/^.*\/uploads/, '/uploads')}`;
   }

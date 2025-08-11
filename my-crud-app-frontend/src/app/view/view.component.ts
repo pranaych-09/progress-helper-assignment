@@ -11,7 +11,7 @@ import { QrDialogComponent } from '../shared/qr-dialog/qr-dialog.component';
 @Component({
   selector: 'app-view',
   standalone: true,
-  imports: [QrDialogComponent,CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatDialogModule, DeleteConfirmDialogComponent, RouterLink],
+  imports: [QrDialogComponent, CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatDialogModule, DeleteConfirmDialogComponent, RouterLink],
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css'],
 })
@@ -19,26 +19,23 @@ export class ViewComponent {
   @Input() employee: any;
 
   constructor(private dialog: MatDialog, private router: Router) {
-    
+
   }
 
-  qrcode(){
+  qrcode() {
     const dialogRef = this.dialog.open(QrDialogComponent, {
-          data: { empID: this.employee.empID },
-          disableClose : false
-        });
+      data: { empID: this.employee.empID },
+      disableClose: false
+    });
 
   }
 
   getProfilePictureUrl(): string {
-    console.log("THis is loggifng :", this.employee);
-    if ('kyc' in this.employee) {
-      console.log(this.employee.kyc);
-    }
     const path = this.employee?.profilePicture;
-    const fallback = '/uploads/profile-pics/default.jpg';
-
-    if (!path) return `http://localhost:3000${fallback}`;
+    if (!path) {
+      const formatted = (this.employee.name);
+      return `https://ui-avatars.com/api/?name=${formatted}&background=random&color=fff&rounded=true&length=2`;
+    }
 
     return `http://localhost:3000${path.replace(/^.*\/uploads/, '/uploads')}`;
   }
@@ -66,7 +63,7 @@ export class ViewComponent {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent,
       {
         data: { employee: this.employee },
-        disableClose : false
+        disableClose: false
       }
     );
 

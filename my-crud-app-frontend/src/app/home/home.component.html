@@ -4,7 +4,7 @@
   <div class="header-actions">
     <button mat-flat-button
       style="border: 1px solid #ccc; border-radius: 4px; "
-      (click)="downloadHelpers()" matTooltip="Download all helpers">
+      (click)="downloadHelpers()" matTooltip="Download filtered helpers">
       <mat-icon >save_alt</mat-icon>
 
     </button>
@@ -19,7 +19,7 @@
 
 <div class="main-container">
   <section class="helper-section">
-    <app-menu (employeeSelected)="onEmployeeSelected($event)"></app-menu>
+    <app-menu (employeeSelected)="onEmployeeSelected($event)"  (employeesListChanged)="onEmployeesListChanged($event)"></app-menu>
   </section>
   <section class="form-section">
     <app-view [employee]="selectedEmployee"></app-view>

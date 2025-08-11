@@ -19,7 +19,7 @@ type SortOption = 'nameAsc' | 'nameDesc' | 'empIDAsc' | 'empIDDesc' | null;
 })
 export class MenuComponent implements OnInit {
   @Output() employeeSelected = new EventEmitter<any>();
-
+  @Output() employeesListChanged = new EventEmitter<any[]>();
   searchTerm = '';
   selectedServices: string[] = [];
   selectedOrganizations: string[] = [];
@@ -50,6 +50,7 @@ export class MenuComponent implements OnInit {
 
       this.employeeSelected.emit(data[0]);
     }
+    this.employeesListChanged.emit(this.employees);
   }
 
   isName(value: string): boolean {
