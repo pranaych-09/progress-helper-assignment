@@ -172,4 +172,9 @@ export class MenuComponent implements OnInit {
     this.searchTerm='';
     this.onSearchInput();
   }
+  deleteEmployee(empID: string) {
+  this.employees = this.employees.filter(emp => emp.empID !== empID);
+  this.fetchEmployees();
+}
+
 }

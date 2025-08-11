@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild } from '@angular/core';
 import { MenuComponent } from '../menu/menu.component';
 import { ViewComponent } from '../view/view.component';
 import { MatDivider } from '@angular/material/divider';
@@ -18,7 +18,7 @@ export class HomeComponent {
   selectedEmployee: any;
   employeesList : any[] = [];
   constructor(private empService: EmployeeService) { }
-
+  @ViewChild(MenuComponent) menuComponent!: MenuComponent;
   convertToCSV(objArray: any[]): string {
     if (!objArray.length) return '';
 
@@ -129,6 +129,8 @@ export class HomeComponent {
     console.log('Download initiated');
   }
 
-
+  onHelperDeleted(empID : string){
+    this.menuComponent.deleteEmployee(empID);
+  }
 
 }

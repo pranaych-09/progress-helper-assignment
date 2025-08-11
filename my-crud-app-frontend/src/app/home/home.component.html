@@ -22,6 +22,6 @@
     <app-menu (employeeSelected)="onEmployeeSelected($event)"  (employeesListChanged)="onEmployeesListChanged($event)"></app-menu>
   </section>
   <section class="form-section">
-    <app-view [employee]="selectedEmployee"></app-view>
+    <app-view [employee]="selectedEmployee"(helperDeleted)="onHelperDeleted($event)"></app-view>
   </section>
 </div>

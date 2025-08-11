@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card'; // optional but helps if you're using <mat-card>
 import { MatIconModule } from '@angular/material/icon';
@@ -8,17 +8,19 @@ import { Router } from '@angular/router';
 import { DeleteConfirmDialogComponent } from '../shared/dialog-box/dialog-box.component';
 import { RouterLink } from '@angular/router';
 import { QrDialogComponent } from '../shared/qr-dialog/qr-dialog.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-view',
   standalone: true,
-  imports: [QrDialogComponent, CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatDialogModule, DeleteConfirmDialogComponent, RouterLink],
+  imports: [MatSnackBarModule, RouterLink, QrDialogComponent, CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatDialogModule, DeleteConfirmDialogComponent, RouterLink],
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css'],
 })
 export class ViewComponent {
   @Input() employee: any;
-
-  constructor(private dialog: MatDialog, private router: Router) {
+  @Output() helperDeleted = new EventEmitter<string>();
+  constructor(private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
 
   }
 
@@ -56,7 +58,7 @@ export class ViewComponent {
 
   onEdit() {
     console.log('Edit Employee ID:', this.employee._id);
-    // this.router.navigate(['/form', this.employee._id]);
+    // this.router.navigate(['/form', this.employee._id]);  
   }
 
   onDelete() {
@@ -73,8 +75,20 @@ export class ViewComponent {
           method: 'DELETE',
         })
           .then((res) => res.json())
-          .then(() => window.location.reload());
+          .then(() => {
+            this.snackBar.open('Helper deleted successfully', 'Close', { duration: 3000,horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['snackbar-success'] });
+            this.helperDeleted.emit(this.employee.empID);
+          })
+          .catch((err) => {
+            console.error(err);
+            this.snackBar.open('Error deleting helper', 'Close', { duration: 3000,horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['snackbar-error'] });
+          });
       }
+
     });
     console.log('Delete Employee ID:', this.employee._id);
   }
