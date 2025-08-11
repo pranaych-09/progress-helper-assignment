@@ -1,0 +1,27 @@
+<div class="header-container">
+  <h1 class="home-header">Helper Module</h1>
+
+  <div class="header-actions">
+    <button mat-flat-button
+      style="border: 1px solid #ccc; border-radius: 4px; "
+      (click)="downloadHelpers()" matTooltip="Download all helpers">
+      <mat-icon >save_alt</mat-icon>
+
+    </button>
+    <button mat-flat-button color="primary" [routerLink]="['/form']" matTooltip="Add a new helper">
+      <mat-icon>add</mat-icon>
+      Add Helper
+    </button>
+
+
+  </div>
+</div>
+
+<div class="main-container">
+  <section class="helper-section">
+    <app-menu (employeeSelected)="onEmployeeSelected($event)"></app-menu>
+  </section>
+  <section class="form-section">
+    <app-view [employee]="selectedEmployee"></app-view>
+  </section>
+</div>

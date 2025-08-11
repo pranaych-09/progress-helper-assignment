@@ -1,0 +1,158 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.menu {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border : 1px solid #eaeaea;
+}
+
+.menu-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.search-box {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.sort-dropdown {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reset {
+  background-color: #dc3545;
+}
+
+.apply {
+  margin-top: 0.5rem;
+  background-color: #28a745;
+}
+
+.result-count {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.5rem 0;
+}
+
+.scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.filter-dropdown {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+}
+
+.filter-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.filter-group {
+  flex: 1; 
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+
+.search-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 210px; /*  Fixed width so it won't eat other buttons */
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 28px 8px 28px; /* space for icons on both sides */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.icon-left {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+.icon-right {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  cursor: pointer;
+}
+
+.icon-right:hover {
+  color: #333;
+}
+
+/* Example styling for other buttons */
+.sort-btn {
+  margin-left: 8px;
+  background-color: #007bff;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.reset-btn {
+  margin-left: 8px;
+  background-color: #dc3545;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.active-card app-search-card {
+  
+  background: #000000;
+  transition: all 0.rgb(0, 0, 0)-in-out;
+}
+
+.active-card app-search-card:hover {
+  transform: scale(1.02);
+}
+

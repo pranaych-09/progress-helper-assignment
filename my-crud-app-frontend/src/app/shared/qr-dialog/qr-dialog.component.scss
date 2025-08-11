@@ -1,0 +1,40 @@
+/* Style the dialog title bar */
+h2[mat-dialog-title] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.4rem;
+  margin: 0;
+  padding-right: 8px; /* Spacing for the close button */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Style the close button */
+.close-btn {
+  margin-left: auto;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+/* Style the content */
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+}
+
+/* Style the QR code (optional margin below) */
+qrcode {
+  margin-bottom: 16px;
+}
+
+/* Style the download button */
+button[mat-raised-button] {
+  align-self: center;
+}
+

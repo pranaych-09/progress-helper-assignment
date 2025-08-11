@@ -1,0 +1,96 @@
+.employee-view-card {
+  padding: 2rem;
+  border-radius: 10px;
+  background-color: #f4f4f4;
+}
+
+.review-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Review Header Styles */
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.profile-photo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  margin-right: 16px;
+}
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  flex-grow: 1;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.profile-role {
+  color: gray;
+  font-size: 14px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Section Block Styles */
+.review-section-block {
+  margin-bottom: 24px;
+}
+
+.fixed-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1em;
+  font-weight: bold;
+  width: 100%;
+}
+
+.fixed-heading::after {
+  content: '';
+  flex-grow: 1;
+  height: 2px;
+  background-color: #bcbbbb;
+}
+
+/* Grid Layout */
+.info-grid p {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  margin: 4px 0;
+}
+
+.info-grid strong {
+  font-weight: 300;
+  color: #000000;
+}
+
+a {
+  color: #0077b6;
+  text-decoration: none;
+}
+
+a:hover {
+  cursor: pointer;
+}
+

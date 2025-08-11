@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* html, body { height: 100%; } */
+/* In src/styles.css */
+
+/* Import a modern font like 'Inter' from Google Fonts */
+/* You should add this <link> to your index.html head section:
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+*/
+
+:root {
+  --primary-color: #007BFF; /* A vibrant blue for buttons and highlights */
+  --background-color: #FFFFFF;
+  --secondary-background-color: #F7F8FC; /* Very light grey for sidebars, active items */
+  --text-primary: #1A1A1A; /* A soft black for primary text */
+  --text-secondary: #6c757d; /* Grey for secondary text */
+  --border-color: #DEE2E6; /* A light, subtle border color */
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}

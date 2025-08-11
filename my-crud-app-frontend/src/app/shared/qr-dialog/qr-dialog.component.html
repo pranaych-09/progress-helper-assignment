@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>
+  Employee Identity - {{ data.empID }}
+  <button mat-icon-button class="close-btn" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <qrcode [qrdata]="qrData" [width]="200"></qrcode>
+<br /><br />
+<button mat-raised-button color="primary" (click)="downloadQRCode()">Download QR</button>
+
+</mat-dialog-content>
+
+

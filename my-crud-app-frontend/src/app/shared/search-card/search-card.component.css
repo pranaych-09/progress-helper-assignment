@@ -1,0 +1,56 @@
+.search-card {
+  border-bottom: 1px solid #000000;
+  padding: 0.5rem 0.9rem;
+  background-color: #ffffff;
+  transition: background 0.2s, transform 0.2s;
+  margin-bottom: 15px;
+}
+
+.search-card:hover {
+  background-color: #adb4dd;
+}
+
+.employee-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.employee-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.employee-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #1a202c;
+  margin-bottom: 2px;
+}
+
+.employee-service {
+  font-size: 0.82rem;
+  color: #000000;
+}
+
+.employee-id {
+  font-size: 0.72rem;
+  color: #000000;
+  margin-left: auto; 
+}
+
+:host(.active) .search-card {
+    background-color: #adb4dd;
+
+}
+
+

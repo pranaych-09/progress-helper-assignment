@@ -1,0 +1,84 @@
+<ng-container *ngIf="employee">
+    <mat-card class="employee-view-card">
+        <div class="review-section">
+
+            <!-- Review Header with Profile Photo and Info -->
+            <div class="review-header">
+                <div class="profile-photo">
+                    <img [src]="getProfilePictureUrl()" alt="Profile" />
+                </div>
+                <div class="profile-info">
+                    <h2>{{ employee.name }}</h2>
+                    <p class="profile-role">{{ employee.typeOfService }}</p>
+                </div>
+
+                <!-- Edit/Delete Buttons -->
+                <div class="card-actions">
+                    <button mat-icon-button (click)="onEdit()" matTooltip="Edit"
+                        [routerLink]="['/form', employee.empID]"
+                        style="border: 1px solid #ccc; border-radius: 4px; padding: 4px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <mat-icon>edit</mat-icon>       
+                    </button>
+
+                    <button mat-icon-button (click)="onDelete()" matTooltip="Delete"
+                        style="border: 1px solid #ccc; border-radius: 4px; padding: 4px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <mat-icon>delete_outline</mat-icon>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="review-section-block">
+                <h3 class="fixed-heading">Account Details</h3>
+                <div class="info-grid">
+                    <p><strong>Idnetification Card</strong>
+                        <a><mat-icon (click)="qrcode()" style="cursor: pointer;">visibility</mat-icon></a>
+                    </p>
+                    <p><strong>Employee Code</strong> {{ employee.empID }}</p>
+
+                </div>
+            </div>
+
+            <!-- Personal Details Section -->
+            <div class="review-section-block">
+                <h3 class="fixed-heading">Personal Details</h3>
+                <div class="info-grid">
+                    <p><strong>Gender</strong> {{ employee.gender }}</p>
+                    <p><strong>Languages</strong> {{ employee.languagesKnown?.join(', ') }}</p>
+                    <p><strong>Email ID</strong> {{ employee.email || '-' }}</p>
+                    <p><strong>Mobile No</strong> {{ employee.phone || '-' }}</p>
+                </div>
+            </div>
+
+            <!-- Service Details Section -->
+            <div class="review-section-block">
+                <h3 class="fixed-heading">Service Details</h3>
+                <div class="info-grid">
+                    <p><strong>Organization</strong> {{ employee.organizationName }}</p>
+                    <p><strong>Joined On</strong> {{ formatDate(employee.createdAt) }}</p>
+                </div>
+            </div>
+
+            <!-- Uploaded KYC Documents -->
+            <div class="review-section-block" *ngIf="employee.documents?.length || employee.kyc">
+                <h3 class="fixed-heading">KYC Documents</h3>
+                <div *ngIf="employee.kyc" class="info-grid">
+                    <p>
+                        <strong>{{ employee.kyc.name }}</strong>
+                        <a [href]="getDocumentUrl(employee.kyc.path)" target="_blank" rel="noopener noreferrer">
+                            <mat-icon>visibility</mat-icon>
+                        </a>
+                    </p>
+                </div>
+                <div *ngFor="let doc of employee.documents" class="info-grid">
+                    <p>
+                        <strong>{{ doc.name }}</strong>
+                        <a [href]="getDocumentUrl(doc.path)" target="_blank" rel="noopener noreferrer">
+                            <mat-icon>visibility</mat-icon>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</ng-container>
