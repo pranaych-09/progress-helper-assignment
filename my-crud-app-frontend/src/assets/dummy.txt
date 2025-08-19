@@ -4,3 +4,16 @@ ok the add employee form is perfect and done(/form)
 now i have to create a new screen to edit helper(/form:empID)
 its basically the same layout css as the form for add helper istead it has no stepper and prefilled form fields that can be fetched by out service using the empID in params that can be mutable
 and finally put the employee which is already done in updateEmployee service
+
+
+so How to implement inf scroll to my menu:
+
+hmmmm
+hmmmmmmmmm
+
+lets put scoll for 3 emp at a time for dev purpose then change it to 10 while pushing
+
+page=some number
+skip =(page-1)*limit
+limit = 3
+

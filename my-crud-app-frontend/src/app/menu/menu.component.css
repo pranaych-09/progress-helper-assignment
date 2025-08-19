@@ -5,7 +5,7 @@ html, body {
 }
 
 .menu {
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -60,11 +60,17 @@ html, body {
   margin: 0.5rem 0;
 }
 
-.scroll-container {
+/* .scroll-container {
   flex: 1;
   overflow-y: auto;
   padding-right: 6px;
+} */
+.scroll-container {
+  flex: 1;
+  max-height: 400px;
+  overflow-y: auto;
 }
+
 
 .filter-dropdown {
   background: white;

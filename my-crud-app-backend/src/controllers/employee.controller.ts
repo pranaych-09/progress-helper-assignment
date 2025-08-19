@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import Employee from '../models/employee.model';
 import Counter from '../models/counter.model';
 
-
 export const getAllEmployees = async (_req: Request, res: Response) => {
   const employees = await Employee.find();
   res.json(employees);
@@ -22,7 +21,6 @@ export const getEmployeeById = async (req: Request, res: Response) => {
   }
 };
 
-  
 const generateEmpID = async (): Promise<string> => {
   const counter = await Counter.findByIdAndUpdate(
     'empID',
@@ -179,7 +177,8 @@ export const updateEmployee = async (req: Request, res: Response) => {
 
 export const getEmployeesWithFilters = async (req: Request, res: Response) => {
   try {
-    const { empID, name, gender, typeOfService, languages, phone, organizationName } = req.query;
+    const vair = (await Employee.find()).length;
+    const { empID, name, gender, typeOfService, languages, phone, organizationName,page,limit,sortOption } = req.query;
 
     const filter: Record<string, any> = {};
 
@@ -223,9 +222,36 @@ export const getEmployeesWithFilters = async (req: Request, res: Response) => {
         filter.languagesKnown = languages; // Single language match
       }
     }
+    const pageNum = parseInt(page as string) || 0;
+    const limitNum = parseInt(limit as string) || 5;
+    const totalCount = (await Employee.find(filter)).length;
 
-    const employees = await Employee.find(filter);
-    res.status(200).json(employees);
+    let sort: Record<string, 1 | -1> = {};
+    switch (sortOption) {
+      case 'nameAsc':
+        sort = { name: 1 };
+        break;
+      case 'nameDesc':
+        sort = { name: -1 };
+        break;
+      case 'empIDAsc':
+        sort = { empID: 1 };
+        break;
+      case 'empIDDesc':
+        sort = { empID: -1 };
+        break;
+      default:
+        sort = { createdAt: 1 }; 
+    }
+
+    const employees = await Employee.find(filter).sort(sort).skip(pageNum*limitNum).limit(limitNum);
+    res.status(200).json({
+      data:employees,
+      total:vair,
+      currtotal : totalCount,
+      page:pageNum,
+      limit: limitNum
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Search failed' });

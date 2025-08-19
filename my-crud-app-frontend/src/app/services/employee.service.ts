@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class EmployeeService {
   private apiUrl = 'http://localhost:3000/api/employees';
-  private hashApiUrl = 'http://localhost:3000/generate-hash'; 
+  private hashApiUrl = 'http://localhost:3000/generate-hash';
   constructor(private http: HttpClient) {
     console.log('EmployeeService initialized');
   }
@@ -17,8 +17,15 @@ export class EmployeeService {
   createEmployee(formData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, formData);
   }
-  getEmployees(filters: any = {}): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl, { params: filters });
+  getEmployees(filters: any = {}, page: number, limit: number,sortOption:any): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl, {
+      params: {
+        ...filters,
+        page:page.toString(),
+        limit:limit.toString(),
+        sortOption
+      }
+    });
   }
   getEmployeeById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/get/${id}`);
@@ -26,5 +33,5 @@ export class EmployeeService {
   updateEmployee(empID: string, updates: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${empID}`, updates);
   }
-  
+
 }

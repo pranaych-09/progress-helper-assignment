@@ -1,7 +1,7 @@
 <mat-card class="menu">
   <div class="menu-header">
     <select [(ngModel)]="sortOption" (change)="onSortChange($event)" class="sort-dropdown">
-      <option [value]="null">↑↓</option>
+      <option [value]="null">Sort By</option>
       <option value="nameAsc">Name ↑</option>
       <option value="nameDesc">Name ↓</option>
       <option value="empIDAsc">ID ↑</option>
@@ -49,15 +49,16 @@
 
 
   <!-- Results -->
-  <p class="result-count">{{ employees.length }} of {{ total }} results</p>
+  <p class="result-count">{{ curr }} of {{ total }} results</p>
 
-  <div class="scroll-container">
+  <div class="scroll-container" (scroll)="onScroll($event)">
     <div *ngFor="let emp of employees" (click)="selectEmployee(emp)" style="cursor: pointer; " >
 
       <app-search-card [name]="emp.name" [service]="emp.typeOfService" [empId]="emp.empID"
         [profilePic]="emp.profilePicture" [active]="selectedEmpID === emp.empID">
       </app-search-card>
-    </div>
 
+    </div>
+      <div *ngIf="loading" style="text-align:center; padding:1rem;">Loading...</div>
   </div>
 </mat-card>

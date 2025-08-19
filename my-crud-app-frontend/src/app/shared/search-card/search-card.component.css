@@ -1,9 +1,9 @@
 .search-card {
   border-bottom: 1px solid #000000;
-  padding: 0.5rem 0.9rem;
+  padding: 0.9rem;
   background-color: #ffffff;
   transition: background 0.2s, transform 0.2s;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
 }
 
 .search-card:hover {
@@ -34,7 +34,10 @@
   font-weight: bold;
   font-size: 1rem;
   color: #1a202c;
-  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  max-width: 200px;
 }
 
 .employee-service {
