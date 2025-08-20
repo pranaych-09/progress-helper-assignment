@@ -241,7 +241,7 @@ export const getEmployeesWithFilters = async (req: Request, res: Response) => {
         sort = { empID: -1 };
         break;
       default:
-        sort = { createdAt: 1 }; 
+        sort = { updatedAt: -1 }; 
     }
 
     const employees = await Employee.find(filter).sort(sort).skip(pageNum*limitNum).limit(limitNum);

@@ -16,6 +16,9 @@ app.use('/api/documents', documentRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+app.get("/config",(req,res)=>{
+    res.json({apiUrl:process.env.secretKey});
+});
 
 
 export default app;

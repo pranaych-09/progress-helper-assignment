@@ -22,12 +22,6 @@ export class DeleteConfirmDialogComponent {
   }
 
   close(value: boolean) {
-    this.snackBar.open('Helper Deleted successfully!', 'Close', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      panelClass: ['snackbar-success']
-    });
     this.dialogRef.close(value);
   }
 }

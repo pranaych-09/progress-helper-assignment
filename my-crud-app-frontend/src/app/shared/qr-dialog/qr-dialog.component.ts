@@ -13,7 +13,6 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { EmployeeService } from '../../services/employee.service';
 import * as CryptoJS from 'crypto-js';
-
 @Component({
   selector: 'app-qr-dialog',
   standalone: true,
@@ -35,14 +34,18 @@ import * as CryptoJS from 'crypto-js';
 })
 export class QrDialogComponent {
 
-  secretKey: string = 'Jai Babuuu';
+  secretKey: string = '';
   qrData: string = '';
   
+  
 
-  constructor(private dialogRef: MatDialogRef<QrDialogComponent>,
+  constructor(private EmployeeService: EmployeeService,private dialogRef: MatDialogRef<QrDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { empID: string },
   ) { 
     this.qrData = this.generateSecureQRData(data.empID);
+    this.EmployeeService.getConfig().subscribe((cfg: { secretKey: string }) => {
+      this.secretKey = cfg.secretKey;
+    });
   }
   
   close(value: boolean) {

@@ -9,7 +9,8 @@ import { Observable } from 'rxjs';
 })
 export class EmployeeService {
   private apiUrl = 'http://localhost:3000/api/employees';
-  private hashApiUrl = 'http://localhost:3000/generate-hash';
+  private configUrl = 'http://localhost:3000/config'; 
+
   constructor(private http: HttpClient) {
     console.log('EmployeeService initialized');
   }
@@ -34,4 +35,7 @@ export class EmployeeService {
     return this.http.put<any>(`${this.apiUrl}/${empID}`, updates);
   }
 
+  getConfig(): Observable<{ secretKey:String }> {
+    return this.http.get<{ secretKey: string }>(this.configUrl);
+  }
 }

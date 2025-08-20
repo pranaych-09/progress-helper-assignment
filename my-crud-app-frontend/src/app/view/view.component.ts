@@ -21,7 +21,7 @@ export class ViewComponent {
   @Input() employee: any;
   @Output() helperDeleted = new EventEmitter<string>();
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
-
+    
   }
 
   qrcode() {
@@ -90,6 +90,5 @@ export class ViewComponent {
       }
 
     });
-    console.log('Delete Employee ID:', this.employee._id);
   }
 }

@@ -143,7 +143,10 @@ export class MenuComponent implements OnInit {
       },
     });
   }
-
+  setLimit(){
+    console.log("current limit is :",this.limit);
+    this.fetchEmployees();
+  }
 
   toggleFilter() {
     this.showFilter = !this.showFilter;
