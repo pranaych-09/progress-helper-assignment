@@ -35,7 +35,7 @@ export class EmployeeService {
     return this.http.put<any>(`${this.apiUrl}/${empID}`, updates);
   }
 
-  getConfig(): Observable<{ secretKey:String }> {
-    return this.http.get<{ secretKey: string }>(this.configUrl);
-  }
+  getConfig(): Observable<{ secretKey: string }> {
+  return this.http.get<{ secretKey: string }>(this.configUrl);
+}
 }
