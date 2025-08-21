@@ -9,12 +9,11 @@
     </select>
 
     <button (click)="toggleFilter()" class="btn"><i class="cil-filter"></i></button>
-    <!-- <input type="text" [(ngModel)]="searchTerm" (input)="onSearchInput()" placeholder="Search by name, ID, or phone"
-      class="search-box" /> -->
+
     <div class="search-wrapper">
       <span class="icon-left">🔍</span>
 
-      <input type="text" [(ngModel)]="searchTerm" (input)="onSearchInput()" placeholder="Search by name, ID, or phone"
+      <input type="text" [(ngModel)]="searchTerm" (input)="onSearchInput()" placeholder="Search name, ID, phone"
         class="search-input" />
     </div>
 

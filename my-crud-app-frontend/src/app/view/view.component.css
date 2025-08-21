@@ -1,7 +1,10 @@
 .employee-view-card {
   padding: 2rem;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   background-color: #f4f4f4;
+  min-height: 80vh;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .review-section {
@@ -9,22 +12,21 @@
   flex-direction: column;
 }
 
-/* Review Header Styles */
 .review-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
 .profile-photo {
-  width: 64px;
-  height: 64px;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   overflow: hidden;
   background-color: #e0e0e0;
-  margin-right: 16px;
+  margin-right: 1rem;
 }
 
 .profile-photo img {
@@ -39,12 +41,13 @@
 
 .profile-info h2 {
   margin: 0;
-  font-size: 20px;
+  max-width: 500px;
+  font-size: 1.25rem;
 }
 
 .profile-role {
   color: gray;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .card-actions {
@@ -52,15 +55,14 @@
   gap: 0.5rem;
 }
 
-/* Section Block Styles */
 .review-section-block {
-  margin-bottom: 24px;
+  margin-bottom: 1rem;
 }
 
 .fixed-heading {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
   font-size: 1em;
   font-weight: bold;
   width: 100%;
@@ -69,15 +71,14 @@
 .fixed-heading::after {
   content: '';
   flex-grow: 1;
-  height: 2px;
+  height: 0.125rem;
   background-color: #bcbbbb;
 }
 
-/* Grid Layout */
 .info-grid p {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  margin: 4px 0;
+  grid-template-columns: 12.5rem 1fr;
+  margin: 0.25rem 0;
 }
 
 .info-grid strong {
@@ -100,11 +101,10 @@ a:hover {
   color: #0077b6;     
   text-decoration: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 1.125rem;
 }
 
 .view-link mat-icon {
-  font-size: 25px;     /* size to match screenshot */
-  margin-right: 4px;   /* space between icon & text */
+  font-size: 1.5625rem;
+  margin-right: 0.25rem;
 }
-

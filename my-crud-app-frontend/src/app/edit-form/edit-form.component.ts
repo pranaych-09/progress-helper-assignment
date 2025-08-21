@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
 import { BackButtonComponent } from '../shared/back-button/back-button.component';
 import { CommonModule } from '@angular/common';
-
+import { API_BASE_URL } from '../app.config';
 @Component({
   selector: 'app-edit-form',
   templateUrl: './edit-form.component.html',
@@ -118,7 +118,7 @@ export class EditFormComponent implements OnInit {
     const filename = path.split('/').pop(); // extract filename
 
     // Construct frontend-accessible URL
-    const url = `http://localhost:3000/uploads/documents/${filename}`;
+    const url = `${API_BASE_URL}/uploads/documents/${filename}`;
     window.open(url, '_blank');
   }
 
@@ -161,7 +161,7 @@ export class EditFormComponent implements OnInit {
       const filename = backendPath.split('/').pop(); // extract filename
 
       // Construct frontend-accessible URL
-      const url = `http://localhost:3000/uploads/documents/${filename}`;
+      const url = `${API_BASE_URL}/uploads/documents/${filename}`;
       window.open(url, '_blank');
     }
   }
@@ -183,14 +183,12 @@ export class EditFormComponent implements OnInit {
 
   getProfilePictureUrl(): string {
     const path = this.profilePictureOriginal;
-    console.log("bhAAi", path);
-    const fallback = '/uploads/profile-pics/default.jpg';
 
     if (!path) {
-      return `http://localhost:3000${fallback}`;
+      return ``;
     }
 
-    return `http://localhost:3000${path.replace(/^.*\/uploads/, '/uploads')}`;
+    return `${API_BASE_URL}${path.replace(/^.*\/uploads/, '/uploads')}`;
   }
 
   onFileSelect(event: Event) {

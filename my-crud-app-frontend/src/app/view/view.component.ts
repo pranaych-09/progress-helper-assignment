@@ -9,6 +9,7 @@ import { DeleteConfirmDialogComponent } from '../shared/dialog-box/dialog-box.co
 import { RouterLink } from '@angular/router';
 import { QrDialogComponent } from '../shared/qr-dialog/qr-dialog.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { API_BASE_URL } from '../app.config';
 
 @Component({
   selector: 'app-view',
@@ -39,12 +40,12 @@ export class ViewComponent {
       return `https://ui-avatars.com/api/?name=${formatted}&background=random&color=fff&rounded=true&length=2`;
     }
 
-    return `http://localhost:3000${path.replace(/^.*\/uploads/, '/uploads')}`;
+    return `${API_BASE_URL}${path.replace(/^.*\/uploads/, '/uploads')}`;
   }
 
 
   getDocumentUrl(path: string): string {
-    return `http://localhost:3000${path.replace(/^.*\/uploads/, '/uploads')}`;
+    return `${API_BASE_URL}${path.replace(/^.*\/uploads/, '/uploads')}`;
   }
 
   formatDate(dateString: string): string {
@@ -56,10 +57,6 @@ export class ViewComponent {
     });
   }
 
-  onEdit() {
-    console.log('Edit Employee ID:', this.employee._id);
-    // this.router.navigate(['/form', this.employee._id]);  
-  }
 
   onDelete() {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent,
@@ -71,7 +68,7 @@ export class ViewComponent {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        fetch(`http://localhost:3000/api/employees/${this.employee.empID}`, {
+        fetch(`${API_BASE_URL}/api/employees/${this.employee.empID}`, {
           method: 'DELETE',
         })
           .then((res) => res.json())

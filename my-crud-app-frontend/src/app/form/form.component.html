@@ -33,7 +33,8 @@
 
   <!-- Step Content -->
   <div class="step-content" *ngIf="!showSuccessModal">
-    <ng-container [ngSwitch]="stepper?.selectedIndex ?? 0">
+
+    <ng-container [ngSwitch]="stepper ? stepper.selectedIndex : 0">
       <!-- Step 1: Helper Details -->
       <div *ngSwitchCase="0">
         <form [formGroup]="helperDetailsForm">
@@ -45,7 +46,7 @@
                 <span *ngIf="!profilePicturePreview">+</span>
               </label>
               <br>
-              <p *ngIf="!profilePicturePreview">Upload DP(.png, .jpeg) size <6mb </p>
+              <p *ngIf="!profilePicturePreview">Upload DP(.png, .jpeg) size </p>
             </div>
 
 
@@ -95,10 +96,11 @@
             <span class="required-field">Phone*</span>
             <mat-form-field appearance="fill">
               <mat-label>Phone</mat-label>
-              <input matInput formControlName="phone" />
+              <input matInput formControlName="phone" (keypress)="allowOnlyDigits($event)" />
             </mat-form-field>
 
-            <span class="required-field">Email*</span>
+
+            <span class="required-field">Email</span>
             <mat-form-field appearance="fill">
               <mat-label>Email</mat-label>
               <input matInput formControlName="email" />
@@ -187,14 +189,15 @@
             <p><strong>Languages</strong> {{ helperDetailsForm.value.languagesKnown?.join(', ') }}</p>
             <p><strong>Email ID</strong> {{ helperDetailsForm.value.email || '-' }}</p>
             <p><strong>Mobile No</strong> {{ helperDetailsForm.value.phone || '-' }}</p>
-            <p><strong>KYC Document</strong>  <a  *ngIf="kycDocumentFile" class="yep" (click)="previewDocument(kycDocumentFile)">
-              <mat-icon>visibility</mat-icon> 
+            <p><strong>KYC Document</strong> <a *ngIf="kycDocumentFile" class="yep"
+                (click)="previewDocument(kycDocumentFile)">
+                <mat-icon>visibility</mat-icon>
               </a>
               <span *ngIf="!kycDocumentFile">-</span>
-             </p>
+            </p>
           </div>
         </div>
-        
+
 
 
 
@@ -214,7 +217,7 @@
           <h3 class="fixed-heading">Uploaded Documents</h3>
           <div *ngFor="let doc of documentsFiles" class="info-grid">
             <p>
-              <strong>{{ doc.customName }}</strong> 
+              <strong>{{ doc.customName }}</strong>
               <a *ngIf="doc.file" (click)="previewDocument(doc.file)">
                 <mat-icon>visibility</mat-icon>
               </a>

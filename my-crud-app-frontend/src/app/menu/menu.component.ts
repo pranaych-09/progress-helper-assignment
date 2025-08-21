@@ -8,6 +8,11 @@ import { MatIcon } from '@angular/material/icon';
 import { MatOption } from '@angular/material/core';
 import { MatSelectTrigger } from '@angular/material/select';
 import { MatFormField } from '@angular/material/select';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { OnDestroy } from '@angular/core';
+
+
 type SortOption = 'nameAsc' | 'nameDesc' | 'empIDAsc' | 'empIDDesc' | null;
 
 @Component({
@@ -31,8 +36,8 @@ export class MenuComponent implements OnInit {
 
   employees: any[] = [];
   total: number = 0;
-  totalEmps : number = 0;
-  curr : number = 0;
+  totalEmps: number = 0;
+  curr: number = 0;
   selectedEmpID = '';
 
   page = 0;
@@ -40,11 +45,34 @@ export class MenuComponent implements OnInit {
   loading = false;
 
   query: any = {};
+
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
   constructor(private empService: EmployeeService) { }
 
   ngOnInit() {
     this.fetchEmployees();
+    this.searchSubject
+      .pipe(
+        debounceTime(600),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(x => {
+        this.fetchEmployees();
+      });
   }
+
+  onSearchInput() {
+    this.searchSubject.next(this.searchTerm);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   selectEmployee(emp: any) {
     this.selectedEmpID = emp.empID;
     this.employeeSelected.emit(emp);
@@ -60,7 +88,7 @@ export class MenuComponent implements OnInit {
   }
 
   isName(value: string): boolean {
-    return /^[a-zA-Z\s]+$/.test(value);
+    return /^[a-zA-Z\s'.\-&/\\]+$/.test(value);
   }
   isEmployeeId(value: string): boolean {
     return /^EMP\d+$/i.test(value);
@@ -100,16 +128,6 @@ export class MenuComponent implements OnInit {
     this.page = 0;
     this.total = 0;
     this.employees = [];
-    // this.empService.getEmployees(query, this.page, this.limit).subscribe({
-    //   next: (data: any) => {
-    //     this.employees = this.sortList(data);
-    //     this.total = this.total == 0 ? data.length : this.total;
-    //     this.selectEmployeeFromBackend(data);
-    //   },
-    //   error: (err: any) => {
-    //     console.error('Search failed', err);
-    //   },
-    // });
     this.loadEmployeesPage(queryy, this.page, true);
   }
   onScroll(event: any) {
@@ -127,7 +145,7 @@ export class MenuComponent implements OnInit {
     if (this.loading) return;
     this.loading = true;
 
-    this.empService.getEmployees(query, page, this.limit,this.sortOption).subscribe({
+    this.empService.getEmployees(query, page, this.limit, this.sortOption).subscribe({
       next: (res: any) => {
         this.employees = [...this.employees, ...res.data];
         this.total = res.total;
@@ -143,8 +161,8 @@ export class MenuComponent implements OnInit {
       },
     });
   }
-  setLimit(){
-    console.log("current limit is :",this.limit);
+  setLimit() {
+    console.log("current limit is :", this.limit);
     this.fetchEmployees();
   }
 
@@ -178,9 +196,7 @@ export class MenuComponent implements OnInit {
   closeFilter() {
     this.showFilter = false;
   }
-  onSearchInput() {
-    this.fetchEmployees();
-  }
+
 
   onSortChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value as SortOption;

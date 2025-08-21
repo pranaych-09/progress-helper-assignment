@@ -13,10 +13,8 @@ import { EmployeeService } from '../services/employee.service';
 import { SuccessModalComponent } from '../shared/success-modal/success-modal.component';
 import { Router } from '@angular/router';
 import { ViewChild, ElementRef } from '@angular/core';
-import html2canvas from 'html2canvas';
-import { QRCodeModule } from 'angularx-qrcode';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { QrDialogComponent } from '../shared/qr-dialog/qr-dialog.component'; // Import your QR dialog component
+import { QrDialogComponent } from '../shared/qr-dialog/qr-dialog.component';
 import { RouterLink } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
 import { BackButtonComponent } from '../shared/back-button/back-button.component';
@@ -40,7 +38,6 @@ import { KycUploadDialogComponent } from '../shared/kyc-upload-dialog/kyc-upload
     MatTooltip,
     MatRadioModule,
     SuccessModalComponent,
-    QRCodeModule,
     RouterLink,
     BackButtonComponent
   ],
@@ -56,7 +53,7 @@ export class FormComponent {
   documentsForm: FormGroup;
 
   kycUploaded = false;
-  selectedKycDocType: string = ''; // To store the selected KYC document type
+  selectedKycDocType: string = '';
   kycDocumentFile: File | null = null;
 
   profilePictureFile: File | null = null;
@@ -72,7 +69,7 @@ export class FormComponent {
   showSuccessModal = false;
   showErrorModal = false;
 
-  joinedOnDate = new Date(); // Or use helperDetailsForm.value.joinedOn
+  joinedOnDate = new Date();
 
 
   constructor(
@@ -88,15 +85,24 @@ export class FormComponent {
       organizationName: ['', Validators.required],
       languagesKnown: [[]],
       gender: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Added phone validation
-      email: ['', [Validators.email]] // Added email validation
-
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      email: ['', [Validators.pattern(/^[^\s@]+@[^\s]+\.[A-Za-z]{2,}$/)]]
     });
 
     this.documentsForm = this.fb.group({
       documents: ['']
     });
   }
+
+  allowOnlyDigits(event: KeyboardEvent): boolean {
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();  
+      return false;
+    }
+    return true;
+  }
+
+
 
   openKycDialog() {
     console.log('Opening KYC upload dialog');
@@ -115,7 +121,7 @@ export class FormComponent {
         console.log('KYC uploaded:', result, result.type);
       } else {
         console.log('KYC upload failed', result.type);
-        this.kycUploaded = false; // Reset if dialog was closed without action
+        this.kycUploaded = false;
       }
     });
   }
@@ -134,10 +140,6 @@ export class FormComponent {
       reader.readAsDataURL(this.profilePictureFile);
     } else {
       const selectedFiles = Array.from(input.files);
-      // this.documentsFiles = selectedFiles.map(file => ({
-      //   file,
-      //   customName: file.name
-      // }));
       this.documentsFiles.push(
         ...selectedFiles.map(file => ({
           file,
@@ -172,12 +174,10 @@ export class FormComponent {
       formData.append('languagesKnown[]', lang);
     });
 
-    // Add profile picture
     if (this.profilePictureFile) {
       formData.append('profilePicture', this.profilePictureFile, this.profilePictureFile.name);
     }
 
-    // Add documents with custom names
     this.documentsFiles.forEach((doc) => {
       formData.append('documents', doc.file, doc.customName || doc.file.name);
     });
@@ -192,14 +192,11 @@ export class FormComponent {
       next: (res: any) => {
         console.log('Employee created:', res);
         // alert('Employee created successfully!');
-        this.showSuccessModal = true;   // reset form or navigate
+        this.showSuccessModal = true;
+        this.router.navigate(['/']);
         const dialogRef = this.dialog.open(QrDialogComponent, {
           data: { empID: res.empID },
           disableClose: true,
-        });
-
-        dialogRef.afterClosed().subscribe(() => {
-          this.router.navigate(['/']);
         });
       },
       error: (err: any) => {
@@ -210,15 +207,7 @@ export class FormComponent {
     });
 
   }
-  downloadQRCode(empID: string) {
-    const qrElement = this.qrContainer.nativeElement;
-    html2canvas(qrElement).then((canvas) => {
-      const link = document.createElement('a');
-      link.download = `${empID}_QRCode.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    });
-  }
+
 
   previewDocument(file: File) {
     console.log('Previewing document:', file);

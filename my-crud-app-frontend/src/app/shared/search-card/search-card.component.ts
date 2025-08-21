@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-
+import { API_BASE_URL } from '../../app.config';
 @Component({
   selector: 'app-search-card',
   standalone: true,
@@ -18,15 +18,6 @@ export class SearchCardComponent {
     return this.active;
   }
 
-  // getProfilePictureUrl(): string {
-
-  //   const path = this.profilePic === '' ? '' : this.profilePic;
-  //   const fallback = '/uploads/profile-pics/default.jpg';
-
-  //   if (!path) return `http://localhost:3000${fallback}`;
-
-  //   return `http://localhost:3000${path.replace(/^.*\/uploads/, '/uploads')}`;
-  // }
 
   getProfilePictureUrl(): string {
   if (!this.profilePic || this.profilePic === '') {
@@ -34,7 +25,7 @@ export class SearchCardComponent {
     return `https://ui-avatars.com/api/?name=${formatted}&background=random&color=fff&rounded=true&length=2`;
   }
   const path = this.profilePic;
-  return `http://localhost:3000${path.replace(/^.*\/uploads/, '/uploads')}`;
+  return `${API_BASE_URL}${path.replace(/^.*\/uploads/, '/uploads')}`;
 }
 
 }

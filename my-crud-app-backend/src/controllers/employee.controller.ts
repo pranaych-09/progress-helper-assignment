@@ -51,11 +51,6 @@ export const deleteEmployee = async (req: Request, res: Response) => {
 export const createEmployee = async (req: Request, res: Response) => {
   try {
     const empID = await generateEmpID();
-    // console.log('Generated empID:', empID);
-    // console.log('Request body:', req.body);
-    // console.log('Files in request:', req.files);
-    // console.log('File in request:', req.file);
-
     const body = req.body || {};
     const name = body.name || '';
     const typeOfService = body.typeOfService || '';
@@ -187,7 +182,7 @@ export const getEmployeesWithFilters = async (req: Request, res: Response) => {
     }
 
     if (name) {
-      filter.name = { $regex: new RegExp(name as string, 'i') }; // case-insensitive partial match
+      filter.name = { $regex: new RegExp(name as string, 'i') }; 
     }
 
     if (gender) {
@@ -204,7 +199,7 @@ export const getEmployeesWithFilters = async (req: Request, res: Response) => {
 
 
     if (phone) {
-      filter.phone = phone;
+      filter.phone = { $regex: new RegExp(phone as string, 'i') };;
     }
 
     if (organizationName) {
@@ -219,11 +214,11 @@ export const getEmployeesWithFilters = async (req: Request, res: Response) => {
       if (Array.isArray(languages)) {
         filter.languagesKnown = { $all: languages }; // Must know *all* languages
       } else {
-        filter.languagesKnown = languages; // Single language match
+        filter.languagesKnown = languages; 
       }
     }
-    const pageNum = parseInt(page as string) || 0;
-    const limitNum = parseInt(limit as string) || 5;
+    const pageNum = parseInt(page as string);
+    const limitNum = parseInt(limit as string);
     const totalCount = (await Employee.find(filter)).length;
 
     let sort: Record<string, 1 | -1> = {};

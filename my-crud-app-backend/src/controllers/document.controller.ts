@@ -19,7 +19,7 @@ export const uploadDocument = async (req: Request, res: Response) => {
         $push: {
           documents: {
             name,
-            path: file.path.replace(/\\/g, '/'), // Windows fix
+            path: file.path.replace(/\\/g, '/'), 
             originalName: file.originalname
           }
         }

@@ -1,7 +1,4 @@
-// styles.scss or component-specific SCSS
-
 $form-blue: #0077b6;
-
 
 .navigation-bar {
   display: flex;
@@ -26,14 +23,12 @@ $form-blue: #0077b6;
   min-height: 100vh;
 
   .custom-stepper {
-    min-width: 400px;
-    max-width: 400px;
+    min-width: 25rem;
+    max-width: 25rem;
     background: #e0eff5;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0.625rem;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
     padding: 1rem;
-
-
 
     ::ng-deep .mat-step-label,
     ::ng-deep .mat-step-text-label {
@@ -42,19 +37,18 @@ $form-blue: #0077b6;
     }
 
     m ::ng-deep .mat-vertical-stepper-header {
-      margin-bottom: 42px;
+      margin-bottom: 2.625rem;
     }
 
     .step-description {
-      font-size: 12px;
+      font-size: 0.75rem;
       color: gray;
-      margin-top: 4px;
+      margin-top: 0.25rem;
     }
 
     .mat-step-header {
       padding: 1rem;
       cursor: pointer;
-      // border-left: 4px solid transparent;
 
       &.mat-active {
         background-color: #e0f7fa;
@@ -68,43 +62,40 @@ $form-blue: #0077b6;
   }
 
   .Time-Pass {
-    min-width: 400px;
-    max-width: 400px;
+    min-width: 25rem;
+    max-width: 25rem;
     background: #e0eff5;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0.625rem;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
     padding: 1rem;
   }
 
   .Time-Pass button {
     display: flex;
-    /* Make icon + text align nicely */
     align-items: center;
-    gap: 6px;
-    /* Space between icon and text */
-    padding: 8px 14px;
-    // background-color: #cecdcd;
-    /* Material blue */
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
     color: rgb(0, 0, 0);
     border: none;
-    border-radius: 10px;
-    font-size: 14px;
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
     cursor: pointer;
     min-width: 100%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 0.625rem;
+    margin-bottom: 0.625rem;
   }
+
   .Time-Pass button.active {
-  background-color: #1976d2;
-  color: white;
-}
+    background-color: #1976d2;
+    color: white;
+  }
 
   .step-content {
     flex: 1;
     background: #ffffff;
-    border-radius: 12px;
+    border-radius: 0.75rem;
     padding: 2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
     color: #333;
 
     ::ng-deep .mat-form-field-label {
@@ -134,9 +125,9 @@ $form-blue: #0077b6;
     justify-content: center;
     align-items: center;
     background: #f0f0f0;
-    border: 2px dashed #aaa;
-    width: 120px;
-    height: 120px;
+    border: 0.125rem dashed #aaa;
+    width: 7.5rem;
+    height: 7.5rem;
     border-radius: 50%;
     cursor: pointer;
     overflow: hidden;
@@ -184,7 +175,7 @@ mat-form-field {
     gap: 1rem;
     background: #f4f4f4;
     padding: 0.75rem;
-    border-radius: 6px;
+    border-radius: 0.375rem;
     margin-bottom: 0.5rem;
 
     mat-icon {
@@ -205,10 +196,10 @@ mat-form-field {
   margin-bottom: 2rem;
 
   .upload-box {
-    width: 180px;
-    height: 180px;
-    border: 2px dashed #aaa;
-    border-radius: 12px;
+    width: 11.25rem;
+    height: 11.25rem;
+    border: 0.125rem dashed #aaa;
+    border-radius: 0.75rem;
     background-color: #f0f0f0;
     display: flex;
     flex-direction: column;
@@ -249,17 +240,16 @@ mat-form-field {
   }
 }
 
-
 .kyc-upload-section {
   display: flex;
   justify-content: flex-start;
   margin: 1rem 0;
 
   .kyc-box {
-    width: 180px;
-    height: 180px;
-    border: 2px dashed #aaa;
-    border-radius: 12px;
+    width: 11.25rem;
+    height: 11.25rem;
+    border: 0.125rem dashed #aaa;
+    border-radius: 0.75rem;
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
@@ -299,15 +289,12 @@ mat-form-field {
   margin-top: 2rem;
 
   button {
-    min-width: 100px;
+    min-width: 6.25rem;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     font-weight: 500;
-
-    border-radius: 10px;
+    border-radius: 0.625rem;
     transition: background-color 0.3s ease;
-
-
 
     mat-icon {
       margin-right: 0.5rem;
@@ -318,15 +305,15 @@ mat-form-field {
 .review-header {
   display: flex;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
 
   .profile-photo {
-    width: 64px;
-    height: 64px;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     overflow: hidden;
     background-color: #f0f0f0;
-    margin-right: 16px;
+    margin-right: 1rem;
 
     img {
       width: 100%;
@@ -338,27 +325,24 @@ mat-form-field {
   .profile-info {
     h2 {
       margin: 0;
-      font-size: 20px;
+      font-size: 1.25rem;
     }
 
     .profile-role {
       color: gray;
-      font-size: 14px;
+      font-size: 0.875rem;
     }
   }
 }
 
 .review-section-block {
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
 
   .fixed-heading {
     display: flex;
     align-items: center;
-    /* Vertically center text and line */
-    gap: 12px;
-    /* Optional space between text and line */
+    gap: 0.75rem;
     font-size: 1em;
-    /* Your normal h3 styling */
     font-weight: bold;
     width: 100%;
   }
@@ -366,37 +350,31 @@ mat-form-field {
   .fixed-heading::after {
     content: '';
     flex-grow: 1;
-    /* Fill the remaining space */
-    height: 2px;
+    height: 0.125rem;
     background-color: #bcbbbb;
   }
 
-
   p {
-    margin: 4px 0;
+    margin: 0.25rem 0;
   }
 
   .doc-name {
-    margin: 0 8px;
+    margin: 0 0.5rem;
   }
 
   strong {
     color: #5b5b5b;
     font-weight: 250;
-
   }
 
   h3 {
     font-weight: 600;
-
   }
 
   .info-grid p {
     display: grid;
-    grid-template-columns: 200px 1fr;
-    /* 150px label, remaining space for value */
-    margin: 4px 0;
-    /* spacing between lines */
+    grid-template-columns: 12.5rem 1fr;
+    margin: 0.25rem 0;
   }
 
   .info-grid strong {
@@ -411,462 +389,74 @@ mat-form-field {
       cursor: pointer;
     }
   }
-
 }
 
 .review-doc-item {
   display: flex;
   align-items: center;
   background: #f9f9f9;
-  padding: 8px 12px;
-  border-radius: 4px;
-  margin-bottom: 8px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
-.file-name{
+.file-name {
   font-size: 1.3rem;
 }
 
 .view-btn {
   flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   background: transparent;
   border: none;
   cursor: pointer;
   color: #1976d2;
 }
 
-
-/* Upload / Add Documents square box */
 .upload-section {
-  margin-top: 20px;
+  margin-top: 1.25rem;
 }
 
 .upload-label {
-  width: 200px;
-  height: 140px;
-  border: 2px dashed #d9d9d9;
-  border-radius: 8px;
+  width: 12.5rem;
+  height: 8.75rem;
+  border: 0.125rem dashed #d9d9d9;
+  border-radius: 0.5rem;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 0.375rem;
   cursor: pointer;
   box-sizing: border-box;
-  padding: 8px;
+  padding: 0.5rem;
   color: #666;
   background: #f6f9ff;
   border-color: #1976d2;
   color: #1976d2;
 }
 
-/* upload icon */
 .upload-label mat-icon {
-  font-size: 28px;
+  font-size: 1.75rem;
   color: #757575;
 }
 
-/* add-doc text; keep on single line */
 .upload-label .label-text {
-  font-size: 12px;
-  white-space: nowrap; /* prevents wrapping */
+  font-size: 0.75rem;
+  white-space: nowrap;
 }
 
-/* hide real file input */
 .upload-label input[type="file"] {
   display: none;
 }
 
-/* hover */
 .upload-label:hover {
   background: #eaeaea;
   border-color: #1976d2;
   color: #1976d2;
 }
-
-
-// .formm-layout {
-//   display: flex;
-//   flex-direction: row;
-//   gap: 2rem;
-//   padding: 2rem;
-//   background-color: #f5f5f5;
-
-// .custom-stepper {
-//   min-width: 250px;
-//   background: rgb(255, 255, 255);
-//   border-radius: 12px;
-//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-//   .mat-vertical-content {
-//     display: none !important;
-//   }
-
-//   .mat-step-header {
-//     padding: 1rem;
-
-//     &.mat-active {
-//       background-color: $form-light-blue;
-//       border-left: 4px solid $form-blue;
-//     }
-//   }
-// }
-
-//   .step-content {
-//     flex: 1;
-//     background: white;
-//     padding: 2rem;
-//     border-radius: 12px;
-//     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-//   }
-// }
-
-// .form-section {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1.5rem;
-
-//   mat-form-field {
-//     width: 100%;
-//   }
-
-//   .gender-group {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 0.5rem;
-
-//     label {
-//       font-weight: 500;
-//       color: #333;
-//     }
-
-//     mat-radio-group {
-//       display: flex;
-//       gap: 2rem;
-//     }
-//   }
-// }
-
-// .step-actions {
-//   display: flex;
-//   justify-content: space-between;
-//   margin-top: 2rem;
-
-//   button {
-//     min-width: 100px;
-//   }
-// }
-
-// .review-section {
-//   background: #f5f5f5;
-//   border-radius: 12px;
-//   padding: 2rem 1.5rem;
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1.2rem;
-
-//   h3 {
-//     font-size: 1.3rem;
-//     color: $form-blue;
-//     margin-bottom: 1rem;
-//     font-weight: 600;
-//   }
-
-//   p {
-//     font-size: 1.05rem;
-//     color: #333;
-
-//     strong {
-//       color: $form-blue;
-//     }
-//   }
-
-//   .review-doc-item {
-//     display: flex;
-//     align-items: center;
-//     gap: 0.7rem;
-//     background: #e0f7fa;
-//     border-radius: 6px;
-//     padding: 0.7rem 1rem;
-//     margin-bottom: 0.5rem;
-
-//     .doc-name {
-//       font-weight: 500;
-//       color: #555;
-//     }
-
-//     mat-icon {
-//       color: $form-blue;
-//     }
-
-//     button[mat-icon-button] {
-//       background: #fff;
-//       border-radius: 50%;
-//       &:hover {
-//         background: $form-light-blue;
-//       }
-//     }
-//   }
-// }
-
-// .profile-pic-wrapper {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: flex-start;
-//   gap: 1rem;
-
-//   .upload-circle {
-//     width: 150px;
-//     height: 150px;
-//     border: 2px dashed $form-blue;
-//     border-radius: 50%;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     position: relative;
-//     overflow: hidden;
-//     cursor: pointer;
-//     background-color: #e0f7fa;
-
-//     input[type='file'] {
-//       display: none;
-//     }
-
-//     img {
-//       width: 100%;
-//       height: 100%;
-//       object-fit: cover;
-//       border-radius: 50%;
-//     }
-
-//     span {
-//       font-size: 2rem;
-//       color: $form-blue;
-//     }
-
-//     &:hover {
-//       background-color: $form-light-blue;
-//     }
-//   }
-// }
-
-
-// .formm{
-//   display: flex;
-//   flex-direction: column;
-//   padding: 1rem 4rem;
-//   background-color: #f5f5f5;
-// }
-
-// .formm mat-stepper {
-//   width: 66.66%; /* 2/3 of the screen */
-//   margin: 0 auto; /* center horizontally */
-//   border-radius: 10px;
-// }
-// .review-section {
-//   background: #f5f5f5;
-//   border-radius: 12px;
-//   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-//   padding: 2rem 1.5rem;
-//   margin-bottom: 2rem;
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1.2rem;
-
-//   h3 {
-//     font-size: 1.3rem;
-//     color: #0077b6;
-//     margin-bottom: 1rem;
-//     font-weight: 600;
-//   }
-
-//   p {
-//     font-size: 1.05rem;
-//     color: #333;
-//     margin: 0.2rem 0;
-//     strong {
-//       color: #0077b6;
-//     }
-//   }
-
-//   .review-doc-item {
-//     display: flex;
-//     align-items: center;
-//     gap: 0.7rem;
-//     background: #e0f7fa;
-//     border-radius: 6px;
-//     padding: 0.7rem 1rem;
-//     margin-bottom: 0.5rem;
-//     box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-
-//     .doc-name {
-//       font-weight: 500;
-//       color: #555;
-//       font-size: 1rem;
-//     }
-
-//     mat-icon {
-//       color: #0077b6;
-//       font-size: 1.3rem;
-//     }
-
-//     button[mat-icon-button] {
-//       background: #fff;
-//       border-radius: 50%;
-//       box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-//       transition: background 0.2s;
-//       &:hover {
-//         background: #caf0f8;
-//       }
-//     }
-//   }
-// }
-
-
-// $form-blue: #0077b6;
-// $form-light-blue: #caf0f8;
-// $form-text-gray: #a1a1a1;
-// $form-border-gray: #ccc;
-
-// .form-section {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1.5rem;
-//   padding: 1rem 0;
-
-//   mat-form-field {
-//     width: 100%;
-
-//     .mat-mdc-form-field-flex {
-//       background-color: #f6f9fc;
-//     }
-
-//     .mat-mdc-floating-label {
-//       color: $form-text-gray;
-//     }
-//   }
-//   p {
-//     margin-top: 0.5rem;
-//     font-size: 0.9rem;
-//     color: $form-text-gray;
-//   }
-
-
-
-//   .gender-group {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 0.5rem;
-
-//     label {
-//       font-weight: 500;
-//       color: rgb(255, 255, 255);
-//     }
-
-//     mat-radio-group {
-//       display: flex;
-//       gap: 2rem;
-
-
-//     }
-//   }
-// }
-
-// .step-actions {
-//   display: flex;
-//   justify-content: space-between;
-//   margin-top: 2rem;
-
-//   button {
-//     min-width: 100px;
-//   }
-
-//   .mat-mdc-button,
-//   .mat-mdc-raised-button,
-//   .mat-mdc-outlined-button,
-//   .mat-mdc-unelevated-button {
-//     background-color: $form-blue;
-//     color: white;
-
-//     &:hover {
-//       background-color: darken($form-blue, 10%);
-//     }
-//   }
-// }
-
-// .profile-pic-wrapper {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: flex-start;
-//   gap: 1rem;
-
-//   .upload-circle {
-//     width: 150px;
-//     height: 150px;
-//     border: 2px dashed #0077b6;
-//     border-radius: 50%;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     position: relative;
-//     overflow: hidden;
-//     cursor: pointer;
-//     background-color: #e0f7fa;
-
-//     input[type="file"] {
-//       display: none;
-//     }
-
-//     img {
-//       width: 100%;
-//       height: 100%;
-//       object-fit: cover;
-//       border-radius: 50%;
-//     }
-
-//     span {
-//       font-size: 2rem;
-//       color: #0077b6;
-//     }
-
-//     &:hover {
-//       background-color: #caf0f8;
-//     }
-//   }
-// }
-
-
-// .back-button {
-//   position: absolute;      /* Position it freely inside the parent */
-//   top: 1rem;               /* Distance from top */
-//   left: 1rem;              /* Distance from left */
-//   width: 48px;
-//   height: 48px;
-//   border-radius: 50%;      /* Make it a perfect circle */
-//   background-color: #7b1fa2;  /* Or any color you prefer */
-//   color: white;
-//   border: none;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-//   cursor: pointer;
-//   transition: background-color 0.2s ease, transform 0.2s ease;
-//   z-index: 1000;           /* Make sure it's above other elements */
-// }
-
-
-// .back-button:hover {
-//   background-color: #005f86;
-//   transform: scale(1.05);  /* Slight zoom effect */
-// }
-
-// .back-button mat-icon {
-//   font-size: 24px;
-// }

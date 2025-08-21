@@ -2,14 +2,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-// import { Employee } from './my-crud-app-backend/src/models/employee.model';  //
-
+import { API_BASE_URL } from '../app.config';
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
-  private apiUrl = 'http://localhost:3000/api/employees';
-  private configUrl = 'http://localhost:3000/config'; 
+  private apiUrl = `${API_BASE_URL}/api/employees`;
+  private configUrl = `${API_BASE_URL}/config`; 
 
   constructor(private http: HttpClient) {
     console.log('EmployeeService initialized');
