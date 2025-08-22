@@ -1,6 +1,5 @@
 import express from 'express';
 import { getAllEmployees, createEmployee, updateEmployee, getEmployeesWithFilters, deleteEmployee, getEmployeeById } from '../controllers/employee.controller';
-import { profilePicUpload } from '../config/multerProfilePic';
 import { upload } from '../config/multer';
 
 const router = express.Router();
