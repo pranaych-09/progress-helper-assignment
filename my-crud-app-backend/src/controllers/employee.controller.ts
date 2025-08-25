@@ -34,6 +34,22 @@ const generateEmpID = async (): Promise<string> => {
   return `EMP${counter.sequence_value.toString().padStart(4, '0')}`;
 };
 
+export async function deleteFiles(filePaths: string[]): Promise<void> {
+  for (const filePath of filePaths) {
+    try {
+      await fs.unlink(filePath);
+      console.log(`Deleted file: ${filePath}`);
+    } catch (err: any) {
+      if (err.code === "ENOENT") {
+        console.warn(`File not found, skipping: ${filePath}`);
+      } else {
+        console.error(`Error deleting ${filePath}:`, err);
+      }
+    }
+  }
+}
+
+
 export const deleteEmployee = asyncHandler(async (req: Request, res: Response) => {
   const { empID } = req.params;
 
@@ -55,18 +71,19 @@ export const deleteEmployee = asyncHandler(async (req: Request, res: Response) =
   }
 
   // Try deleting each file (don’t throw if missing)
-  for (const filePath of filePaths) {
-    try {
-      await fs.unlink(filePath);
-      console.log(`Deleted file: ${filePath}`);
-    } catch (err: any) {
-      if (err.code === "ENOENT") {
-        console.warn(`File not found, skipping: ${filePath}`);
-      } else {
-        console.error(`Error deleting ${filePath}:`, err);
-      }
-    }
-  }
+  // for (const filePath of filePaths) {
+  //   try {
+  //     await fs.unlink(filePath);
+  //     console.log(`Deleted file: ${filePath}`);
+  //   } catch (err: any) {
+  //     if (err.code === "ENOENT") {
+  //       console.warn(`File not found, skipping: ${filePath}`);
+  //     } else {
+  //       console.error(`Error deleting ${filePath}:`, err);
+  //     }
+  //   }
+  // }
+  deleteFiles(filePaths);
 
   const deleted = await Employee.findOneAndDelete({ empID });
   if (!deleted) {
@@ -146,16 +163,30 @@ export const createEmployee = asyncHandler(async (req: Request, res: Response) =
 export const updateEmployee = asyncHandler(async (req: Request, res: Response) => {
   const { empID } = req.params;
   const updates = { ...req.body };
+  const employee = await Employee.findOne({ empID });
+  const filesToDelete: string[] = [];
+  if (!employee) {
+    const error: any = new Error("Employee not found by ID");
+    error.statusCode = 404;
+    throw error;
+  }
 
   const filesObj = req.files as {
     [fieldname: string]: Express.Multer.File[];
   };
 
+  if (employee.profilePicture) {
+    filesToDelete.push(employee.profilePicture);
+  }
   if (filesObj?.['profilePicture']?.[0]) {
     updates.profilePicture = filesObj['profilePicture'][0].path.replace(/\\/g, '/');
   }
+  
 
   if (filesObj?.['kyc']?.[0]) {
+    if (employee.kyc?.path) {
+      filesToDelete.push(employee.kyc?.path);
+    }
     const kycFile = filesObj['kyc'][0];
     updates.kyc = {
       name: kycFile.originalname,
@@ -182,8 +213,21 @@ export const updateEmployee = asyncHandler(async (req: Request, res: Response) =
   }
 
   if (req.body.clearDocuments === "true") {
+    if (employee.documents?.length) {
+      filesToDelete.push(...employee.documents.map((d: any) => d.path));
+    }
     updates.documents = [];
   } else if (newDocuments.length > 0) {
+    // Delete replaced docs by comparing names
+    const oldDocs = employee.documents;
+    const newDocNames = newDocuments.map((d) => d.name);
+
+    for (const oldDoc of oldDocs) {
+      if (!newDocNames.includes(oldDoc.name)) {
+        filesToDelete.push(oldDoc.path as string);
+      }
+    }
+
     updates.documents = newDocuments;
   }
 
@@ -191,6 +235,10 @@ export const updateEmployee = asyncHandler(async (req: Request, res: Response) =
     const error: any = new Error("No valid updates provided to Edit");
     error.statusCode = 400;
     throw error;
+  }
+
+  if (filesToDelete.length > 0) {
+    await deleteFiles(filesToDelete);
   }
 
   const updated = await Employee.findOneAndUpdate(
