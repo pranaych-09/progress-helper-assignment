@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { QrDialogComponent } from '../shared/qr-dialog/qr-dialog.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { API_BASE_URL } from '../app.config';
+import { EmployeeService } from '../services/employee.service';
 
 @Component({
   selector: 'app-view',
@@ -21,7 +22,7 @@ import { API_BASE_URL } from '../app.config';
 export class ViewComponent {
   @Input() employee: any;
   @Output() helperDeleted = new EventEmitter<string>();
-  constructor(private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
+  constructor(private employeeService:EmployeeService,private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
     
   }
 
@@ -57,35 +58,27 @@ export class ViewComponent {
     });
   }
 
+onDelete() {
+  const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
+    data: { employee: this.employee },
+    disableClose: false
+  });
 
-  onDelete() {
-    const dialogRef = this.dialog.open(DeleteConfirmDialogComponent,
-      {
-        data: { employee: this.employee },
-        disableClose: false
-      }
-    );
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        fetch(`${API_BASE_URL}/api/employees/${this.employee.empID}`, {
-          method: 'DELETE',
-        })
-          .then((res) => res.json())
-          .then(() => {
-            this.snackBar.open('Helper deleted successfully', 'Close', { duration: 3000,horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-success'] });
-            this.helperDeleted.emit(this.employee.empID);
-          })
-          .catch((err) => {
-            console.error(err);
-            this.snackBar.open('Error deleting helper', 'Close', { duration: 3000,horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-error'] });
+  dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    if (confirmed) {
+      this.employeeService.deleteEmployee(this.employee.empID).subscribe({
+        next: () => {
+          this.snackBar.open('Helper deleted successfully', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['snackbar-success']
           });
-      }
+          this.helperDeleted.emit(this.employee.empID);
+        }
+      });
+    }
+  });
+}
 
-    });
-  }
 }

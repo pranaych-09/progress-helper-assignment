@@ -1,9 +1,14 @@
 $form-blue: #0077b6;
 
+.forms {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .navigation-bar {
   display: flex;
   align-items: center;
-  width: 100%;
   padding: 1rem;
 
   .form-header {
@@ -16,19 +21,19 @@ $form-blue: #0077b6;
 
 .formm-layout {
   display: flex;
-  flex-direction: row;
-  padding: 2rem;
+  padding: 1.5rem 2rem 1rem 2rem;
   gap: 2rem;
-  background: #eaeaea;
-  min-height: 100vh;
+  background: #ffffff;
+  height: 80%;
 
   .custom-stepper {
-    min-width: 25rem;
-    max-width: 25rem;
+    min-width: 20rem;
+    max-width: 20rem;
     background: #e0eff5;
     border-radius: 0.625rem;
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
     padding: 1rem;
+    max-height: 79vh;
 
     ::ng-deep .mat-step-label,
     ::ng-deep .mat-step-text-label {
@@ -62,12 +67,13 @@ $form-blue: #0077b6;
   }
 
   .Time-Pass {
-    min-width: 25rem;
-    max-width: 25rem;
+    min-width: 20rem;
+    max-width: 20rem;
     background: #e0eff5;
     border-radius: 0.625rem;
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
     padding: 1rem;
+    max-height: 79vh;
   }
 
   .Time-Pass button {
@@ -97,6 +103,8 @@ $form-blue: #0077b6;
     padding: 2rem;
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
     color: #333;
+    max-height: 75vh;
+    overflow-y: auto;
 
     ::ng-deep .mat-form-field-label {
       color: #333 !important;
@@ -108,15 +116,14 @@ $form-blue: #0077b6;
     }
   }
 
-  .full-width {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
+}
+.bin{
+  cursor: pointer;
 }
 
 .profile-pic-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
   margin-bottom: 2rem;
 
@@ -400,23 +407,6 @@ mat-form-field {
   margin-bottom: 0.5rem;
 }
 
-.file-name {
-  font-size: 1.3rem;
-}
-
-.view-btn {
-  flex: 0 0 auto;
-  width: 2.5rem;
-  height: 2.5rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.625rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: #1976d2;
-}
 
 .upload-section {
   margin-top: 1.25rem;
@@ -459,4 +449,18 @@ mat-form-field {
   background: #eaeaea;
   border-color: #1976d2;
   color: #1976d2;
+}
+
+.view-link {
+  display: inline-flex;
+  align-items: center;
+  color: #0077b6;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.125rem;
+}
+
+.view-link mat-icon {
+  font-size: 1.5625rem;
+  margin-right: 0.25rem;
 }

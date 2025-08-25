@@ -13,8 +13,16 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { OnDestroy } from '@angular/core';
 
 
-type SortOption = 'nameAsc' | 'nameDesc' | 'empIDAsc' | 'empIDDesc' | null;
+type SortOption = 'nameAsc' | 'nameDesc' | 'empIDAsc' | 'empIDDesc' | '';
 
+interface Service {
+  name: string;
+  status: boolean;
+}
+interface Organization {
+  name: string;
+  status: boolean;
+}
 @Component({
   selector: 'app-menu',
   standalone: true,
@@ -23,16 +31,20 @@ type SortOption = 'nameAsc' | 'nameDesc' | 'empIDAsc' | 'empIDDesc' | null;
   styleUrl: './menu.component.css',
 })
 export class MenuComponent implements OnInit {
+
   @Output() employeeSelected = new EventEmitter<any>();
   @Output() employeesListChanged = new EventEmitter<any[]>();
+
   searchTerm = '';
+
   selectedServices: string[] = [];
   selectedOrganizations: string[] = [];
-  allServices = ['Cleaning', 'Driving', 'Security', 'Maintenance'];
-  organizationNames = ['ASBL', 'Inncircles', 'A2Z Helpers', 'Urban Company'];
+  allServices = [{ name: 'Cleaning', status: false }, { name: 'Driving', status: false }, { name: 'Security', status: false }, { name: 'Maintenance', status: false }];
+  organizationNames = [{ name: 'ASBL', status: false }, { name: 'Inncircles', status: false }, { name: 'A2Z Helpers', status: false }, { name: 'Urban Company', status: false }];
+
   showFilter = false;
 
-  sortOption: SortOption = null;
+  sortOption: SortOption = '';
 
   employees: any[] = [];
   total: number = 0;
@@ -41,7 +53,7 @@ export class MenuComponent implements OnInit {
   selectedEmpID = '';
 
   page = 0;
-  limit = 10;
+  limit = 20;
   loading = false;
 
   query: any = {};
@@ -88,47 +100,57 @@ export class MenuComponent implements OnInit {
   }
 
   isName(value: string): boolean {
-    return /^[a-zA-Z\s'.\-&/\\]+$/.test(value);
+    const allowedRegex = /^[a-zA-Z0-9\s@'.\-&/\\]+$/;
+    const mustContainRegex = /[a-zA-Z\s@'.\-&/\\]/;
+
+    return allowedRegex.test(value) && mustContainRegex.test(value);
   }
   isEmployeeId(value: string): boolean {
     return /^EMP\d+$/i.test(value);
   }
-
   isPhone(value: string): boolean {
     return /^[0-9]+$/.test(value);
   }
+
   buildQuery() {
 
     const query: any = {};
-    this.searchTerm = this.searchTerm.trim();
+
     if (this.searchTerm) {
-      if (this.isEmployeeId(this.searchTerm)) {
-        query.empID = this.searchTerm;
-      } else if (this.isName(this.searchTerm)) {
+      const tempTerm = this.searchTerm.trim();
+      if (this.isEmployeeId(tempTerm)) {
+        query.empID = tempTerm;
+      } else if (this.isName(tempTerm)) {
         query.name = this.searchTerm;
-      } else if (this.isPhone(this.searchTerm)) {
+      } else if (this.isPhone(tempTerm)) {
         query.phone = this.searchTerm;
       }
       else {
         query.empID = -1;
       }
-      // console.log('Query:', query);
     }
 
     if (this.selectedServices.length) {
       query.typeOfService = this.selectedServices;
     }
+
     if (this.selectedOrganizations.length) {
       query.organizationName = this.selectedOrganizations;
     }
+
+    query.page = this.page.toString();
+    query.limit = this.limit.toString();
+    query.sortOption = this.sortOption;
+
     return query;
   }
+
   fetchEmployees() {
-    const queryy = this.buildQuery();
     this.page = 0;
     this.total = 0;
     this.employees = [];
-    this.loadEmployeesPage(queryy, this.page, true);
+    const query = this.buildQuery();
+    this.loadEmployeesPage(query, this.page, true);
   }
   onScroll(event: any) {
     const target = event.target;
@@ -145,7 +167,7 @@ export class MenuComponent implements OnInit {
     if (this.loading) return;
     this.loading = true;
 
-    this.empService.getEmployees(query, page, this.limit, this.sortOption).subscribe({
+    this.empService.getEmployees(query).subscribe({
       next: (res: any) => {
         this.employees = [...this.employees, ...res.data];
         this.total = res.total;
@@ -156,13 +178,10 @@ export class MenuComponent implements OnInit {
           this.selectEmployeeFromBackend(this.employees);
         }
       },
-      error: (err: any) => {
-        console.error('Search failed', err);
-      },
     });
   }
   setLimit() {
-    console.log("current limit is :", this.limit);
+    // console.log("current limit is :", this.limit);
     this.fetchEmployees();
   }
 
@@ -170,25 +189,27 @@ export class MenuComponent implements OnInit {
     this.showFilter = !this.showFilter;
   }
 
-  toggleService(service: string, event: Event) {
+  toggleService(service: Service, event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
     if (checked) {
-      this.selectedServices.push(service);
+      service.status = true;
     } else {
-      this.selectedServices = this.selectedServices.filter((s) => s !== service);
+      service.status = false;
     }
   }
 
-  toggleOrganization(organization: string, event: Event) {
+  toggleOrganization(organization: Organization, event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
     if (checked) {
-      this.selectedOrganizations.push(organization);
+      organization.status = true;
     } else {
-      this.selectedOrganizations = this.selectedOrganizations.filter((o) => o !== organization);
+      organization.status = false;
     }
   }
 
   applyFilter() {
+    this.selectedServices = this.allServices.filter(service => service.status).map(service => service.name);
+    this.selectedOrganizations = this.organizationNames.filter(org => org.status).map(org => org.name);
     this.fetchEmployees();
     this.closeFilter();
   }
@@ -206,18 +227,29 @@ export class MenuComponent implements OnInit {
 
   resetAll() {
     this.searchTerm = '';
-    this.sortOption = null;
+    this.sortOption = '';
     this.selectedServices = [];
     this.selectedOrganizations = [];
     this.showFilter = false;
+    this.cleanUpFilters();
     this.fetchEmployees();
   }
+
+  cleanUpFilters() {
+    for (const service of this.allServices) {
+      service.status = false;
+    }
+    for (const org of this.organizationNames) {
+      org.status = false;
+    }
+  }
+
   clearSearch() {
     this.searchTerm = '';
     this.onSearchInput();
   }
+
   deleteEmployee(empID: string) {
-    this.employees = this.employees.filter(emp => emp.empID !== empID);
     this.fetchEmployees();
   }
 

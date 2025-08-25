@@ -18,6 +18,9 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { BackButtonComponent } from '../shared/back-button/back-button.component';
 import { CommonModule } from '@angular/common';
 import { API_BASE_URL } from '../app.config';
+import { ServiceType } from '../enums/service-type.enum';
+import { Language } from '../enums/language.enum';
+import { OrganizationName } from '../enums/organization-name.enum';
 @Component({
   selector: 'app-edit-form',
   templateUrl: './edit-form.component.html',
@@ -51,15 +54,15 @@ export class EditFormComponent implements OnInit {
   currEmployee: any;
   kycUploaded = false;
   selectedKycDocType: string = '';
-  kycDocumentFile: any = null;
+  kycDocumentFile: File | null = null;
   kycDocumentFileURL = '';
   profilePictureFile: File | null = null;
   profilePicturePreview: string | null = null;
-  profilePictureOriginal: string | null = null;
+  profilePictureOriginal: string = '';
 
-  serviceTypes = ['Cleaning', 'Maintenance', 'Security', 'Driving'];
-  languages = ['English', 'Hindi', 'Tamil', 'Telugu', 'Bengali'];
-  organizationNames = ['ASBL', 'Inncircles', 'A2Z Helpers', 'Urban Company'];
+  serviceTypes = Object.values(ServiceType);
+  languages = Object.values(Language);
+  organizationNames = Object.values(OrganizationName);
 
   activeTab: 'helper' | 'documents' = 'helper';
 
@@ -81,10 +84,8 @@ export class EditFormComponent implements OnInit {
   }
   ngOnInit(): void {
     this.empID = this.route.snapshot.paramMap.get('empID')!;
-    // console.log("we gonna edit",this.empID);
     this.initForm();
     this.loadEmployee();
-    // console.log("photo is as this : ",this.profilePicturePreview);
   }
 
   initForm() {
@@ -95,10 +96,14 @@ export class EditFormComponent implements OnInit {
       languagesKnown: [[]],
       gender: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      email: ['', [Validators.email]]
+      email: ['', [Validators.pattern(/^[^\s@]+@[^\s]+\.[A-Za-z]{2,}$/)]]
     });
   }
 
+  removeDP() {
+    this.profilePictureOriginal = '';
+    this.profilePicturePreview = '';
+  }
   onDocumentSelect(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -126,14 +131,12 @@ export class EditFormComponent implements OnInit {
   loadEmployee() {
     this.employeeService.getEmployeeById(this.empID).subscribe({
       next: (emp: any) => {
-        // console.log(emp);
         this.currEmployee = emp;
-        // console.log("herreee", this.currEmployee);
         if (emp.documents) {
           this.documentsFiles = emp.documents.map((doc: any) => ({
             ...doc,
-            customName: '', // default empty, can be edited by user
-            file: null      // no File object for existing docs
+            customName: '', 
+            file: null      
           }));
         }
         this.helperDetailsForm.patchValue(emp);
@@ -141,35 +144,49 @@ export class EditFormComponent implements OnInit {
         if (emp.languagesKnown?.length) {
           this.helperDetailsForm.patchValue({ languagesKnown: emp.languagesKnown });
         }
-        // console.log(emp.profilePicture);
         this.profilePictureOriginal = emp.profilePicture;
+
         this.kycDocumentFile = emp.kyc;
         this.kycUploaded = this.kycDocumentFile ? true : false;
-      },
-      error: (err: any) => {
-        console.error('Failed to load employee', err);
+        this.selectedKycDocType = this.kycDocumentFile ? this.kycDocumentFile.name : '';
       }
     });
   }
 
-  viewFile() {
-    if (this.kycDocumentFile && this.kycDocumentFile.path) {
-      console.log("BUTTON CLICKED");
-      console.log(this.kycDocumentFile);
-
-      const backendPath = this.kycDocumentFile.path; // absolute path
-      const filename = backendPath.split('/').pop(); // extract filename
-
-      // Construct frontend-accessible URL
-      const url = `${API_BASE_URL}/uploads/documents/${filename}`;
+  previewDocument(doc: any) {
+    if (doc instanceof File) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const blob = new Blob([reader.result as ArrayBuffer], { type: doc.type });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      };
+      reader.readAsArrayBuffer(doc);
+    }
+    else if (doc && doc.path) {
+      const url = this.getDocumentUrl(doc.path);
       window.open(url, '_blank');
     }
+    else {
+      console.error("Invalid document:", doc);
+    }
+  }
+
+  getDocumentUrl(path: string): string {
+    return `${API_BASE_URL}${path.replace(/^.*\/uploads/, '/uploads')}`;
+  }
+
+  viewFile() {
+    if (this.kycDocumentFile) {
+      this.previewDocument(this.kycDocumentFile);
+    }
+
   }
 
   openKycDialog() {
     const dialogRef = this.dialog.open(KycUploadDialogComponent, {
       width: '500px',
-      disableClose: true,
+      disableClose: false,
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -198,15 +215,32 @@ export class EditFormComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.profilePicturePreview = reader.result as string;
-        this.profilePictureOriginal = null;
+        this.profilePictureOriginal = '';
       };
       reader.readAsDataURL(this.profilePictureFile);
     }
   }
 
+  getName(doc:any){
+    if(doc.file){
+      return doc.file.name;
+    }
+    return doc.name;
+  }
+
+  removeDocument(index:number){
+      this.documentsFiles.splice(index, 1);
+  }
+
+  allowOnlyDigits(event: KeyboardEvent): boolean {
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
   onSubmit() {
-    // console.log("JAI BABU ANALI AKKADA");
-    console.log(this.helperDetailsForm);
     if (this.helperDetailsForm.invalid) return;
 
     const formData = new FormData();
@@ -222,38 +256,48 @@ export class EditFormComponent implements OnInit {
 
     if (this.profilePictureFile) {
       formData.append('profilePicture', this.profilePictureFile);
+    } else {
+      formData.append('profilePicture', this.profilePictureOriginal);
     }
 
     if (this.kycDocumentFile instanceof File) {
-      formData.append('kyc', this.kycDocumentFile, this.kycDocumentFile.name);
-    } else if (this.kycUploaded && typeof this.kycDocumentFile === 'object' && this.kycDocumentFile.path) {
-      formData.append('kycPath', this.kycDocumentFile.path);
-      formData.append('kycDocumentType', this.kycDocumentFile.documentType || '');
+      formData.append('kyc', this.kycDocumentFile, `${this.selectedKycDocType}${this.kycDocumentFile.name.substring(this.kycDocumentFile.name.lastIndexOf('.'))}`);
+    }
+    console.log("length of the documents is,",this.documentsFiles.length);
+    this.documentsFiles.forEach((doc, i) => {
+      if (doc.file) {
+        const filename = doc.customName
+          ? `${doc.customName}${doc.file.name.substring(doc.file.name.lastIndexOf('.'))}`
+          : doc.file.name;
+
+        formData.append('documents', doc.file, filename);
+      } else {
+
+        formData.append('documentsMeta', JSON.stringify({
+          name: doc.customName ? `${doc.customName}${doc.name.substring(doc.name.lastIndexOf('.'))}` : doc.name,
+          path: doc.path
+        }));
+
+      }
+    });
+    if(this.documentsFiles.length==0){
+      formData.append("clearDocuments", "true");
+    }else{
+      formData.append("clearDocuments","false");
     }
 
 
 
     this.employeeService.updateEmployee(this.empID, formData).subscribe({
       next: (data: any) => {
-        console.log("edited the helper")
         this.snackBar.open('Helper Edited successfully!', 'Close', {
-          duration: 3000, 
+          duration: 3000,
           horizontalPosition: 'right',
           verticalPosition: 'top',
           panelClass: ['snackbar-success']
         });
 
         this.router.navigate(['/']);
-      },
-      error: (err: any) => {
-        console.log("could not edit the helper")
-        this.snackBar.open('Failed to Edit helper. Please try again.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-error']
-        });
-        this.showErrorModal = true;
       }
     });
   }

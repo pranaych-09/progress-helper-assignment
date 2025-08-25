@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { EmployeeService } from '../services/employee.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -16,7 +15,7 @@ import { EmployeeService } from '../services/employee.service';
 export class HomeComponent {
   selectedEmployee: any;
   employeesList : any[] = [];
-  constructor(private empService: EmployeeService) { }
+  constructor() { }
   @ViewChild(MenuComponent) menuComponent!: MenuComponent;
   convertToCSV(objArray: any[]): string {
     if (!objArray.length) return '';

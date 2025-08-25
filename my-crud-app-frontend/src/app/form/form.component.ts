@@ -20,6 +20,9 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { BackButtonComponent } from '../shared/back-button/back-button.component';
 import { MatStepper } from '@angular/material/stepper';
 import { KycUploadDialogComponent } from '../shared/kyc-upload-dialog/kyc-upload-dialog.component';
+import { ServiceType } from '../enums/service-type.enum';
+import { Language } from '../enums/language.enum';
+import { OrganizationName } from '../enums/organization-name.enum';
 @Component({
   selector: 'app-form',
   standalone: true,
@@ -63,9 +66,10 @@ export class FormComponent {
   documentsFiles: Array<{ file: File; customName: string }> = [];
   documentPreviews: Array<string> = [];
 
-  serviceTypes = ['Cleaning', 'Maintenance', 'Security', 'Driving'];
-  languages = ['English', 'Hindi', 'Tamil', 'Telugu', 'Bengali'];
-  organizationNames = ['ASBL', 'Inncircles', 'A2Z Helpers', 'Urban Company'];
+  serviceTypes = Object.values(ServiceType);
+  languages = Object.values(Language);
+  organizationNames = Object.values(OrganizationName);
+
   showSuccessModal = false;
   showErrorModal = false;
 
@@ -83,7 +87,7 @@ export class FormComponent {
       name: ['', Validators.required],
       typeOfService: ['', Validators.required],
       organizationName: ['', Validators.required],
-      languagesKnown: [[]],
+      languagesKnown: [[], Validators.required],
       gender: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.pattern(/^[^\s@]+@[^\s]+\.[A-Za-z]{2,}$/)]]
@@ -96,7 +100,7 @@ export class FormComponent {
 
   allowOnlyDigits(event: KeyboardEvent): boolean {
     if (!/[0-9]/.test(event.key)) {
-      event.preventDefault();  
+      event.preventDefault();
       return false;
     }
     return true;
@@ -114,13 +118,10 @@ export class FormComponent {
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('KYC dialog closed with result:', result);
       if (result !== undefined && result.documentType && result.file) {
-        console.log("KYC file is enti ante : ", result);
         this.kycUploaded = true;
         this.selectedKycDocType = result.documentType;
         this.kycDocumentFile = result.file;
-        console.log('KYC uploaded:', result, result.type);
       } else {
-        console.log('KYC upload failed', result.type);
         this.kycUploaded = false;
       }
     });
@@ -150,14 +151,11 @@ export class FormComponent {
   }
 
   onSubmit() {
-    console.log('1');
     if (this.helperDetailsForm.invalid || this.documentsForm.invalid) {
       this.showErrorModal = true;
 
       return;
     }
-    console.log('2');
-
 
     const formData = new FormData();
 
@@ -171,7 +169,7 @@ export class FormComponent {
 
     // Add multiple languages
     this.helperDetailsForm.value.languagesKnown.forEach((lang: string) => {
-      formData.append('languagesKnown[]', lang);
+      formData.append('languagesKnown', lang);
     });
 
     if (this.profilePictureFile) {
@@ -179,19 +177,18 @@ export class FormComponent {
     }
 
     this.documentsFiles.forEach((doc) => {
-      formData.append('documents', doc.file, doc.customName || doc.file.name);
+      formData.append('documents', doc.file, doc.customName
+        ? `${doc.customName}${doc.file.name.substring(doc.file.name.lastIndexOf('.'))}`
+        : doc.file.name);
     });
 
     if (this.kycDocumentFile) {
-      formData.append('kyc', this.kycDocumentFile, this.kycDocumentFile.name);
+      formData.append('kyc', this.kycDocumentFile, `${this.selectedKycDocType}${this.kycDocumentFile.name.substring(this.kycDocumentFile.name.lastIndexOf('.'))}`);
     }
-    console.log('3');
 
-    console.log('Form data prepared:', formData);
     this.employeeService.createEmployee(formData).subscribe({
       next: (res: any) => {
         console.log('Employee created:', res);
-        // alert('Employee created successfully!');
         this.showSuccessModal = true;
         this.router.navigate(['/']);
         const dialogRef = this.dialog.open(QrDialogComponent, {
@@ -199,11 +196,6 @@ export class FormComponent {
           disableClose: true,
         });
       },
-      error: (err: any) => {
-        this.showErrorModal = true;
-        console.error('Error creating employee:', err);
-        // alert('Failed to create employee. Please try again.');
-      }
     });
 
   }

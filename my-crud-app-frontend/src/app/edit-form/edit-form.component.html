@@ -4,6 +4,7 @@
     </button>
     <p class="form-header">Edit Helper</p>
 </div>
+
 <div class="formm-layout">
     <div class="Time-Pass">
         <button mat-button [class.active]="activeTab === 'helper'" (click)="setActive('helper')">
@@ -25,8 +26,9 @@
                             alt="Preview" />
                         <span *ngIf="!profilePictureOriginal && !profilePicturePreview"><mat-icon>add</mat-icon></span>
                     </label>
-                    <br>
-                    <p *ngIf="!profilePicturePreview">Upload DP (.png, .jpeg)</p>
+                    <button mat-flat-button (click)="removeDP()" matTooltip="Remove your DP" *ngIf="profilePictureOriginal || profilePicturePreview">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </div>
 
                 <mat-form-field appearance="fill">
@@ -66,7 +68,7 @@
 
                 <mat-form-field appearance="fill">
                     <mat-label>Phone</mat-label>
-                    <input matInput formControlName="phone" />
+                    <input matInput formControlName="phone" (keypress)="allowOnlyDigits($event)"/>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
@@ -81,13 +83,13 @@
                         </ng-container>
                         <ng-container *ngIf="kycUploaded">
                             <mat-icon>description</mat-icon>
-                            <!-- <p>{{ selectedKycDocType }}</p> -->
                         </ng-container>
                     </label>
                 </div>
-                <button *ngIf="kycDocumentFile" (click)="viewFile()" style=" margin-left:65px;cursor: pointer;">
+                <div class="view-link" *ngIf="kycDocumentFile" (click)="viewFile()">
                     <mat-icon>visibility</mat-icon>
-                </button>
+                    <span>{{selectedKycDocType}}</span>
+                </div>
 
                 <div class="step-actions">
                     <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="helperDetailsForm.invalid">
@@ -103,24 +105,27 @@
             <hr>
             <br>
             <div *ngFor="let doc of documentsFiles; let i = index" class="document-item">
-                <span class="file-name">
-                    {{ doc.originalName || doc.file?.name }}
-                </span>
-                <button *ngIf="doc.path" class="view-btn" (click)="getDocument(doc.path)" type="button">
+                <div class="view-link" (click)="getDocument(doc.path)">
                     <mat-icon>visibility</mat-icon>
-                </button>
+                    <span>
+                        {{ getName(doc)}}
+                    </span>
+                </div>
 
                 <mat-form-field appearance="fill" class="doc-name-field">
                     <mat-label>Custom Name</mat-label>
                     <input matInput [(ngModel)]="doc.customName" name="customName{{i}}"
                         [ngModelOptions]="{standalone: true}" />
+                    <button mat-icon-button matSuffix color="warn" (click)="removeDocument(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </mat-form-field>
 
             </div>
         </div>
 
         <!-- Upload New Documents -->
-        <div class="upload-section">
+        <div *ngIf="5 > documentsFiles.length" class="upload-section">
             <label class="upload-label">
                 <mat-icon>upload_file</mat-icon> Add Documents
                 <input type="file" multiple (change)="onDocumentSelect($event)" />

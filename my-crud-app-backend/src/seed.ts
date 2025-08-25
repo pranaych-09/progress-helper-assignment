@@ -58,3 +58,5 @@ async function seedEmployees() {
 }
 
 seedEmployees();
+
+// Just an helper code to avoid manual form filling for multiple dummy helpers

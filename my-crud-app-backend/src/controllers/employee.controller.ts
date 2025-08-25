@@ -165,7 +165,6 @@ export const updateEmployee = asyncHandler(async (req: Request, res: Response) =
 
   let newDocuments: any[] = [];
 
-  // Uploaded files
   if (filesObj?.['documents']) {
     newDocuments = filesObj['documents'].map((docFile) => ({
       name: docFile.originalname,
@@ -173,7 +172,6 @@ export const updateEmployee = asyncHandler(async (req: Request, res: Response) =
     }));
   }
 
-  // Previous documents
   if (req.body.documentsMeta) {
     const docsMeta = Array.isArray(req.body.documentsMeta)
       ? req.body.documentsMeta
@@ -275,7 +273,7 @@ export const getEmployeesWithFilters = asyncHandler(async (req: Request, res: Re
     default:
       sort = { updatedAt: -1 };
   }
-  
+
   const employees = await Employee.find(filter)
     .sort(sort)
     .skip(pageNum * limitNum)
