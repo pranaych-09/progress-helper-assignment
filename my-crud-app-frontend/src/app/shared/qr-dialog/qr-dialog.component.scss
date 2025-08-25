@@ -1,0 +1,32 @@
+h2[mat-dialog-title] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.4rem;
+  margin: 0;
+  padding-right: 8px; 
+  border-bottom: 1px solid #ddd;
+}
+
+.close-btn {
+  margin-left: 4px;
+}
+
+
+/* Style the content */
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+}
+
+/* Style the QR code (optional margin below) */
+qrcode {
+  margin-bottom: 16px;
+}
+
+button[mat-raised-button] {
+  align-self: center;
+}
+

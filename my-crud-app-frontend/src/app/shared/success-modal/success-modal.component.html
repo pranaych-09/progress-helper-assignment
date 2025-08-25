@@ -1,0 +1,12 @@
+<div class="modal-backdrop" *ngIf="show">
+  <div class="modal-card" [ngClass]="type">
+    <span class="modal-icon">
+      <ng-container [ngSwitch]="type">
+        <span *ngSwitchCase="'success'">&#10003;</span> 
+        <span *ngSwitchCase="'error'">&#10060;</span>  
+        <span *ngSwitchCase="'info'">&#8505;</span>  
+      </ng-container>
+    </span>
+    <span class="modal-message">{{ message }}</span>
+  </div>
+</div>

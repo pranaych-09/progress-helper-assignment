@@ -1,0 +1,62 @@
+<mat-card class="menu">
+  <div class="menu-header">
+    <select [(ngModel)]="sortOption" (change)="onSortChange($event)" class="sort-dropdown">
+      <option [value]="''">Latest</option>
+      <option value="nameAsc">Name ↑</option>
+      <option value="nameDesc">Name ↓</option>
+      <option value="empIDAsc">ID ↑</option>
+      <option value="empIDDesc">ID ↓</option>
+    </select>
+
+    <button (click)="toggleFilter()" class="btn"><i class="cil-filter"></i></button>
+
+    <div class="search-wrapper">
+      <span class="icon-left">🔍</span>
+
+      <input type="text" [(ngModel)]="searchTerm" (input)="onSearchInput()" placeholder="Search name, ID, phone"
+        class="search-input" />
+    </div>
+
+
+    <!-- <input type="text" [(ngModel)]="limit" (blur)="setLimit()" (keyup.enter)="setLimit()" /> -->
+  </div>
+
+  <!-- Filter Dropdown -->
+  <div class="filter-dropdown" *ngIf="showFilter">
+    <div class="filter-section">
+      <div class="filter-group">
+        <h3>Filter by Services</h3>
+        <label *ngFor="let service of allServices" class="filter-option">
+          <input type="checkbox" [checked]="service.status" (change)="toggleService(service, $event)" />
+          {{ service.name }}
+        </label>
+      </div>
+
+      <div class="filter-group">
+        <h3>Filter by Organizations</h3>
+        <label *ngFor="let org of organizationNames" class="filter-option">
+          <input type="checkbox" [value]="org" [checked]="org.status" (change)="toggleOrganization(org, $event)" />
+          {{ org.name }}
+        </label>
+      </div>
+    </div>
+
+    <button (click)="applyFilter()" class="btn apply">Apply</button>
+  </div>
+
+  <div>
+    <button (click)="resetAll()" class="btn reset">Reset</button>
+    <p class="result-count">{{ curr }} of {{ total }} results</p>
+  </div>
+
+  <div class="scroll-container" (scroll)="onScroll($event)">
+    <div *ngFor="let emp of employees" (click)="selectEmployee(emp)" style="cursor: pointer; ">
+
+      <app-search-card [name]="emp.name" [service]="emp.typeOfService" [empId]="emp.empID"
+        [profilePic]="emp.profilePicture" [active]="selectedEmpID === emp.empID">
+      </app-search-card>
+
+    </div>
+    <div *ngIf="loading" style="text-align:center; padding:1rem;">Loading...</div>
+  </div>
+</mat-card>

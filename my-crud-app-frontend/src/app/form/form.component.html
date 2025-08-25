@@ -1,0 +1,249 @@
+<div class="forms">
+  <div class="navigation-bar">
+    <button mat-icon-button color="black" [routerLink]="['/']" matTooltip="Back to Home">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <p class="form-header">Add Helper</p>
+  </div>
+
+  <div class="formm-layout">
+
+    <mat-vertical-stepper [linear]="true" #stepper class="custom-stepper" *ngIf="!showSuccessModal">
+      <mat-step [stepControl]="helperDetailsForm">
+        <ng-template matStepLabel>Helper Details
+          <div class="step-description">
+            <p>Add helper details</p>
+          </div>
+        </ng-template>
+      </mat-step>
+      <mat-step [stepControl]="documentsForm">
+        <ng-template matStepLabel>Documents
+          <div class="step-description">
+            <p>Upload related documents</p>
+          </div>
+        </ng-template>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Review
+          <div class="step-description">
+            <p>Check the information and confirm</p>
+          </div>
+        </ng-template>
+      </mat-step>
+    </mat-vertical-stepper>
+
+    <!-- Step Content -->
+    <div class="step-content" *ngIf="!showSuccessModal">
+
+      <ng-container [ngSwitch]="stepper ? stepper.selectedIndex : 0">
+        <!-- Step 1: Helper Details -->
+        <div *ngSwitchCase="0">
+          <form [formGroup]="helperDetailsForm">
+            <div class="form-section">
+              <div class="profile-pic-wrapper">
+                <label class="upload-circle">
+                  <input type="file" accept="image/*" (change)="onFileSelect($event, 'profilePicture')" />
+                  <img *ngIf="profilePicturePreview" [src]="profilePicturePreview" alt="Preview" />
+                  <span *ngIf="!profilePicturePreview">+</span>
+                </label>
+                <br>
+                <p *ngIf="!profilePicturePreview">
+                  Upload DP(.png, .jpeg) &lt;6mb
+                </p>
+              </div>
+
+
+              <!-- Form Fields -->
+              <span class="required-field">Type of Service*</span>
+              <mat-form-field appearance="fill">
+                <mat-label>Type of Service</mat-label>
+                <mat-select formControlName="typeOfService" required>
+                  <mat-option *ngFor="let type of serviceTypes" [value]="type">{{ type }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <span class="required-field">Organization Name*</span>
+              <mat-form-field appearance="fill">
+                <mat-label>Organization Name</mat-label>
+                <mat-select formControlName="organizationName" required>
+                  <mat-option *ngFor="let org of organizationNames" [value]="org">{{ org }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <span class="required-field">Full Name*</span>
+              <mat-form-field appearance="fill">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="name" required />
+              </mat-form-field>
+
+              <span class="required-field">Languages Known*</span>
+              <mat-form-field appearance="fill">
+                <mat-label>Languages</mat-label>
+                <mat-select formControlName="languagesKnown" multiple>
+                  <mat-option *ngFor="let lang of languages" [value]="lang">{{ lang }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div class="gender-group">
+                <span class="required-field">Gender*</span>
+                <br>
+                <mat-radio-group formControlName="gender">
+                  <mat-radio-button value="Male">Male</mat-radio-button>
+                  <mat-radio-button value="Female">Female</mat-radio-button>
+                  <mat-radio-button value="Other">Other</mat-radio-button>
+                </mat-radio-group>
+                <br>
+                <br>
+              </div>
+
+              <span class="required-field">Phone*</span>
+              <mat-form-field appearance="fill">
+                <mat-label>Phone</mat-label>
+                <input matInput formControlName="phone" (keypress)="allowOnlyDigits($event)" />
+              </mat-form-field>
+
+
+              <span class="required-field">Email</span>
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" />
+              </mat-form-field>
+            </div>
+
+
+            <span class="required-field">KYC Document*</span>
+            <div class="kyc-upload-section">
+              <label class="kyc-box" (click)="openKycDialog()">
+                <ng-container *ngIf="!kycUploaded">
+                  <span>+</span>
+                </ng-container>
+                <ng-container *ngIf="kycUploaded">
+                  <mat-icon>description</mat-icon>
+                  <p>{{ selectedKycDocType }}</p>
+                </ng-container>
+              </label>
+            </div>
+
+            <br>
+            <div class="step-actions">
+              <button mat-flat-button color="primary" (click)="stepper.next()"
+                [disabled]="helperDetailsForm.invalid || !kycUploaded">
+                <mat-icon>arrow_forward</mat-icon>Next
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Step 2: Documents -->
+        <div *ngSwitchCase="1">
+          <h1 style="margin: 0;">Additional Documents</h1>
+          <p class="doc-instructions">Upload related documents. This step is optional.</p>
+          <br>
+          <form [formGroup]="documentsForm">
+            <div class="form-section">
+              <div class="uploadDOCS">
+                <label for="document-upload" class="upload-box">
+                  <input id="document-upload" type="file" (change)="onFileSelect($event, 'documents')" multiple />
+                  <span>+</span>
+                  <p>Upload Documents<br><small>(PDF, JPG, DOCX)</small></p>
+                </label>
+              </div>
+
+              <div *ngIf="documentsFiles.length > 0" class="document-list">
+                <div *ngFor="let doc of documentsFiles; let i = index" class="document-item">
+                  <span class="file-name">{{ doc.file.name }}</span>
+                  <mat-form-field appearance="fill" class="doc-name-field">
+                    <mat-label>Custom Name</mat-label>
+                    <input matInput [(ngModel)]="doc.customName" name="customName{{i}}"
+                      [ngModelOptions]="{standalone: true}" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <hr>
+
+          </form>
+          <div class="step-actions">
+            <button mat-flat-button (click)="stepper.previous()"><mat-icon>arrow_back</mat-icon>Previous</button>
+            <button mat-flat-button color="primary"
+              (click)="stepper.next()"><mat-icon>arrow_forward</mat-icon>Next</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Review -->
+        <div *ngSwitchCase="2" class="review-section">
+
+          <!-- Profile and Name -->
+          <div class="review-header">
+            <div class="profile-photo">
+              <img *ngIf="profilePicturePreview" [src]="profilePicturePreview" alt="Preview" />
+            </div>
+            <div class="profile-info">
+              <h2>{{ helperDetailsForm.value.name }}</h2>
+              <p class="profile-role">{{ helperDetailsForm.value.typeOfService }}</p>
+            </div>
+          </div>
+
+          <!-- PERSONAL DETAILS SECTION -->
+          <div class="review-section-block">
+            <h3 class="fixed-heading">Personal Details</h3>
+            <div class="info-grid">
+              <p><strong>Gender</strong> {{ helperDetailsForm.value.gender }}</p>
+              <p><strong>Languages</strong> {{ helperDetailsForm.value.languagesKnown?.join(', ') }}</p>
+              <p><strong>Email ID</strong> {{ helperDetailsForm.value.email || '-' }}</p>
+              <p><strong>Mobile No</strong> {{ helperDetailsForm.value.phone || '-' }}</p>
+              <p><strong>KYC Document</strong> <a *ngIf="kycDocumentFile" class="yep"
+                  (click)="previewDocument(kycDocumentFile)">
+                  <mat-icon>visibility</mat-icon>
+                </a>
+                <span *ngIf="!kycDocumentFile">-</span>
+              </p>
+            </div>
+          </div>
+
+
+
+
+          <!-- SERVICE DETAILS SECTION -->
+          <div class="review-section-block">
+            <h3 class="fixed-heading">Service Details</h3>
+            <div class="info-grid">
+              <p><strong>Service Type</strong> {{ helperDetailsForm.value.typeOfService }}</p>
+              <p><strong>Organization</strong> {{ helperDetailsForm.value.organizationName }}</p>
+              <p><strong>Joined On</strong> {{ joinedOnDate | date: 'dd MMM yyyy' }}</p>
+            </div>
+
+          </div>
+
+          <!-- UPLOADED DOCUMENTS -->
+          <div class="review-section-block" *ngIf="documentsFiles && documentsFiles.length > 0">
+            <h3 class="fixed-heading">Uploaded Documents</h3>
+            <div *ngFor="let doc of documentsFiles" class="info-grid">
+              <p>
+                <strong>{{ doc.customName }}</strong>
+                <a *ngIf="doc.file" (click)="previewDocument(doc.file)">
+                  <mat-icon>visibility</mat-icon>
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="step-actions">
+            <button mat-button (click)="stepper.previous()">
+              <mat-icon>arrow_back</mat-icon>Previous
+            </button>
+            <button mat-flat-button color="primary" (click)="onSubmit()">
+              <mat-icon>add</mat-icon>Add Helper
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <app-success-modal *ngIf="showSuccessModal" [message]="'Helper created successfully!'"
+      [type]="'success'"></app-success-modal>
+    <app-success-modal *ngIf="showErrorModal" [message]="'Failed to create helper. Please try again.'"
+      [type]="'error'"></app-success-modal>
+  </div>
+</div>

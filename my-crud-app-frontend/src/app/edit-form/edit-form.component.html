@@ -1,0 +1,142 @@
+<div class="navigation-bar">
+    <button mat-icon-button color="black" [routerLink]="['/']" matTooltip="Back to Home">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    <p class="form-header">Edit Helper</p>
+</div>
+
+<div class="formm-layout">
+    <div class="Time-Pass">
+        <button mat-button [class.active]="activeTab === 'helper'" (click)="setActive('helper')">
+            <mat-icon>construction</mat-icon> Helper Details
+        </button>
+
+        <button mat-button [class.active]="activeTab === 'documents'" (click)="setActive('documents')">
+            <mat-icon>restore_page</mat-icon> Documents
+        </button>
+    </div>
+    <div *ngIf="activeTab === 'helper'" class="step-content">
+        <form [formGroup]="helperDetailsForm">
+            <div class="form-section">
+                <div class="profile-pic-wrapper">
+                    <label class="upload-circle">
+                        <input type="file" accept="image/*" (change)="onFileSelect($event)" />
+                        <img *ngIf="profilePictureOriginal" [src]="getProfilePictureUrl()" alt="Preview" />
+                        <img *ngIf="!profilePictureOriginal && profilePicturePreview" [src]="profilePicturePreview"
+                            alt="Preview" />
+                        <span *ngIf="!profilePictureOriginal && !profilePicturePreview"><mat-icon>add</mat-icon></span>
+                    </label>
+                    <button mat-flat-button (click)="removeDP()" matTooltip="Remove your DP" *ngIf="profilePictureOriginal || profilePicturePreview">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Type of Service</mat-label>
+                    <mat-select formControlName="typeOfService">
+                        <mat-option *ngFor="let type of serviceTypes" [value]="type">{{ type }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Organization Name</mat-label>
+                    <mat-select formControlName="organizationName">
+                        <mat-option *ngFor="let org of organizationNames" [value]="org">{{ org }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Full Name</mat-label>
+                    <input matInput formControlName="name" />
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Languages</mat-label>
+                    <mat-select formControlName="languagesKnown" multiple>
+                        <mat-option *ngFor="let lang of languages" [value]="lang">{{ lang }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <div class="gender-group">
+                    <span>Gender</span><br />
+                    <mat-radio-group formControlName="gender">
+                        <mat-radio-button value="Male">Male</mat-radio-button>
+                        <mat-radio-button value="Female">Female</mat-radio-button>
+                        <mat-radio-button value="Other">Other</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Phone</mat-label>
+                    <input matInput formControlName="phone" (keypress)="allowOnlyDigits($event)"/>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" />
+                </mat-form-field>
+
+                <div class="kyc-upload-section">
+                    <label class="kyc-box" (click)="openKycDialog()">
+                        <ng-container *ngIf="!kycUploaded">
+                            <span>+</span>
+                        </ng-container>
+                        <ng-container *ngIf="kycUploaded">
+                            <mat-icon>description</mat-icon>
+                        </ng-container>
+                    </label>
+                </div>
+                <div class="view-link" *ngIf="kycDocumentFile" (click)="viewFile()">
+                    <mat-icon>visibility</mat-icon>
+                    <span>{{selectedKycDocType}}</span>
+                </div>
+
+                <div class="step-actions">
+                    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="helperDetailsForm.invalid">
+                        <mat-icon>save</mat-icon>Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="activeTab === 'documents'" class="step-content">
+        <div *ngIf="documentsFiles.length > 0" class="document-list">
+            <h1>Current Documents </h1>
+            <hr>
+            <br>
+            <div *ngFor="let doc of documentsFiles; let i = index" class="document-item">
+                <div class="view-link" (click)="getDocument(doc.path)">
+                    <mat-icon>visibility</mat-icon>
+                    <span>
+                        {{ getName(doc)}}
+                    </span>
+                </div>
+
+                <mat-form-field appearance="fill" class="doc-name-field">
+                    <mat-label>Custom Name</mat-label>
+                    <input matInput [(ngModel)]="doc.customName" name="customName{{i}}"
+                        [ngModelOptions]="{standalone: true}" />
+                    <button mat-icon-button matSuffix color="warn" (click)="removeDocument(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-form-field>
+
+            </div>
+        </div>
+
+        <!-- Upload New Documents -->
+        <div *ngIf="5 > documentsFiles.length" class="upload-section">
+            <label class="upload-label">
+                <mat-icon>upload_file</mat-icon> Add Documents
+                <input type="file" multiple (change)="onDocumentSelect($event)" />
+            </label>
+        </div>
+        <div class="step-actions">
+            <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="helperDetailsForm.invalid">
+                <mat-icon>save</mat-icon>Save Changes
+            </button>
+        </div>
+    </div>
+
+
+</div>

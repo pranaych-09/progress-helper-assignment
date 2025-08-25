@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>
+  Upload KYC Document
+  <button mat-icon-button class="close-btn" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Select Document Type</mat-label>
+    <mat-select [(value)]="selectedDocType">
+      <mat-option *ngFor="let type of documentTypes" [value]="type">
+        {{ type }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="upload-area">
+    <ng-container *ngIf="!selectedFile; else fileUploaded">
+      <button mat-raised-button color="primary" (click)="fileInput.click()">Upload</button>
+      <input type="file" hidden #fileInput (change)="onFileSelected($event)" />
+    </ng-container>
+
+    <ng-template #fileUploaded>
+      <div class="file-info">
+        <p><strong>{{ selectedFile?.name }}</strong></p>
+        <div class="file-actions">
+          <button mat-stroked-button color="primary" (click)="fileInput.click()">Edit</button>
+          <button mat-stroked-button color="accent" (click)="viewFile()">View</button>
+        </div>
+        <input type="file" hidden #fileInput (change)="onFileSelected($event)" />
+      </div>
+    </ng-template>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="uploadDocument()" [disabled]="!selectedFile || !selectedDocType">
+    Save
+  </button>
+</mat-dialog-actions>
