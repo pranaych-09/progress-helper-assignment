@@ -1,5 +1,5 @@
 export interface EmployeeFilters{
-    empId? : string;
+    empID? : string;
     name? : { $regex : RegExp};
     gender? : string;
     typeOfService?: string | {$in : string[]};
